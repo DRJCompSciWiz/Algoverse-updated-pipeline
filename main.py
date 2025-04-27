@@ -34,7 +34,7 @@ import logging
 from OpenAIAgent import OpenAIAgent
 from Scene import Scene
 from Simulator import Simulator
-from Experimental import Experimental
+from Experiment import Experimental
 
 def main():
     """

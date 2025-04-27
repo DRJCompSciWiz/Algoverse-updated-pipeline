@@ -20,7 +20,7 @@ class Scene:
         self.scene_id = scene_id
         self.simulator = simulator  # Store the simulator object
         self.scene_number = int(scene_id.split("_")[-1])
-        self.terminal = "utkarsh"  # For setting it up, switch this to: "robin", "abhinav", or "sid".
+        self.terminal = "siddh"  # For setting it up, switch this to: "robin", "abhinav", or "sid".
         
         # Construct file path based on the terminal setting
         if self.terminal == "utkarsh":

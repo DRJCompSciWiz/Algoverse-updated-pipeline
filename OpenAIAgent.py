@@ -1,4 +1,4 @@
-import openai
+import OpenAIAgent
 
 class OpenAIAgent:
     def __init__(self, api_key, system_prompt= """You are an expert AI agent designed to solve physics problems by interacting directly with a physics simulator. You have access to a variety of tools to manipulate objects, query object states (position, velocity, acceleration, etc.), and simulate physics progression through time (step).
