@@ -1,4 +1,4 @@
-# MuJoCo Physics Simulation with OpenAI Agent
+# PhysicsSimBench
 
 ## 🚀 **Project Overview**
 
