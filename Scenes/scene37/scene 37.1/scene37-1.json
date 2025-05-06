@@ -1,0 +1,17 @@
+{
+    "metadata": {
+      "scene_name": "Explosion with Diagonal Fragments",
+      "task": "Determine the momentum vectors of two fragments exploding in 2D.",
+      "problem_type": "calculation"
+    },
+    "answer": "m1*v1⃗ + m2*v2⃗ = 0⃗",
+    "expected_behavior": "The LLM applies vector conservation of momentum and infers that the fragment momenta cancel in both x and y.",
+    "reasoning": "Because the object starts at rest, the vector sum of momenta must remain zero after the explosion.",
+    "number_of_objects": "3",
+    "objects": {
+      "object_1": { "name": "object", "object_id": "1" },
+      "object_2": { "name": "fragment1", "object_id": "2" },
+      "object_3": { "name": "fragment2", "object_id": "3" }
+    }
+  }
+  

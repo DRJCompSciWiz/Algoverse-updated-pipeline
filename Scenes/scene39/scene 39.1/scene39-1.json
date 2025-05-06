@@ -1,0 +1,18 @@
+{
+    "metadata": {
+      "scene_name": "Horizontal Damped Oscillator",
+      "task": "Explain how damping affects the motion of a horizontally oscillating mass.",
+      "problem_type": "conceptual"
+    },
+    "answer": "A higher damping ratio reduces oscillation amplitude more quickly.",
+    "expected_behavior": "The LLM should describe the role of damping in dissipating kinetic energy over time.",
+    "reasoning": "In horizontal systems, energy is dissipated through damping alone without gravitational influence.",
+    "number_of_objects": "4",
+    "objects": {
+      "object_1": { "name": "mass", "object_id": "1" },
+      "object_2": { "name": "spring", "object_id": "2" },
+      "object_3": { "name": "damper", "object_id": "3" },
+      "object_4": { "name": "surface", "object_id": "4" }
+    }
+  }
+  

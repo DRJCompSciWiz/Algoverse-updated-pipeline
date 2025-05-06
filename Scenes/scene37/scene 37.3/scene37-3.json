@@ -1,0 +1,17 @@
+{
+    "metadata": {
+      "scene_name": "Moving Object Explosion",
+      "task": "Determine fragment velocities in lab frame after explosion of a moving object.",
+      "problem_type": "calculation"
+    },
+    "answer": "v1_lab + v2_lab = 2*v_initial (if equal masses)",
+    "expected_behavior": "The LLM factors in initial momentum when calculating post-explosion fragment speeds.",
+    "reasoning": "Momentum is conserved in the lab frame; explosion redistributes momentum around the initial motion.",
+    "number_of_objects": "3",
+    "objects": {
+      "object_1": { "name": "object", "object_id": "1" },
+      "object_2": { "name": "fragment1", "object_id": "2" },
+      "object_3": { "name": "fragment2", "object_id": "3" }
+    }
+  }
+  

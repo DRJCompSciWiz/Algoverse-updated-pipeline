@@ -1,0 +1,24 @@
+{
+    "metadata": {
+      "scene_name": "Energy Conservation on a Swing - Variation 3",
+      "task": "Determine whether the pendulum or the sliding block attains a higher maximum speed.",
+      "problem_type": "comparison"
+    },
+    "answer": "equal",
+    "expected_behavior": "With negligible friction and same height, energy conservation results in equal speed at the bottom.",
+    "reasoning": "Potential energy mgh is fully converted to kinetic energy 0.5mv².",
+    "number_of_objects": "4",
+    "objects": {
+      "object_1": { "name": "pendulum", "object_id": "1" },
+      "object_2": { "name": "block", "object_id": "2" },
+      "object_3": { "name": "ramp", "object_id": "3" },
+      "object_4": { "name": "surface", "object_id": "4" }
+    },
+    "object_permissions": {
+      "object_1_permissions": { "mass": true, "pos": true },
+      "object_2_permissions": { "mass": true, "pos": true },
+      "object_3_permissions": { "friction": true },
+      "object_4_permissions": { "friction": true }
+    }
+  }
+  

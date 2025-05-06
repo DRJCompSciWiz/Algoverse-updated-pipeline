@@ -1,0 +1,13 @@
+<mujoco>
+  <option gravity="0 0 -9.81"/>
+  <worldbody>
+    <body name="support" pos="0 0 0">
+      <geom type="box" size="0.3 0.3 0.3" rgba="0.5 0.5 0.5 1"/>
+    </body>
+    <body name="skater" pos="0 0 1">
+      <geom type="capsule" fromto="0 0 0 0 0 -1" radius="0.1" rgba="0.2 0.2 1 1"/>
+      <geom type="capsule" fromto="0 0.1 0.5 0 -0.1 0.5" radius="0.05" rgba="0.2 0.2 1 1"/> <!-- arms close to body -->
+      <joint name="skater_joint" type="free"/>
+    </body>
+  </worldbody>
+</mujoco>

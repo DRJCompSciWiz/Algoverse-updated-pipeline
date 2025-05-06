@@ -1,0 +1,18 @@
+{
+    "metadata": {
+      "scene_name": "Vertical Damped Spring-Mass System",
+      "task": "Describe the motion of a vertically hanging mass under damping.",
+      "problem_type": "conceptual"
+    },
+    "answer": "The mass oscillates with decreasing amplitude and settles at equilibrium.",
+    "expected_behavior": "The LLM identifies the balance between gravitational force, spring restoring force, and damping.",
+    "reasoning": "Gravity causes downward displacement, while spring and damper control oscillation and decay.",
+    "number_of_objects": "4",
+    "objects": {
+      "object_1": { "name": "mass", "object_id": "1" },
+      "object_2": { "name": "spring", "object_id": "2" },
+      "object_3": { "name": "damper", "object_id": "3" },
+      "object_4": { "name": "ceiling", "object_id": "4" }
+    }
+  }
+  

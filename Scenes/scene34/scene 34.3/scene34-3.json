@@ -1,0 +1,17 @@
+{
+    "metadata": {
+      "scene_name": "Tipping vs Sliding Decision",
+      "task": "Determine whether the block will tip over or slide down first based on friction and incline angle.",
+      "problem_type": "categorization"
+    },
+    "answer": "High friction leads to tipping; low friction leads to sliding.",
+    "expected_behavior": "The LLM evaluates the torque and friction force to identify the dominant failure mode.",
+    "reasoning": "At low friction, the block slides before tipping; with higher friction, tipping occurs first.",
+    "number_of_objects": "3",
+    "objects": {
+      "object_1": { "name": "block", "object_id": "1" },
+      "object_2": { "name": "inclined_plane", "object_id": "2" },
+      "object_3": { "name": "surface", "object_id": "3" }
+    }
+  }
+  

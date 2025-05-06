@@ -1,0 +1,22 @@
+{
+    "metadata": {
+      "scene_name": "Inclined Frictional Surfaces",
+      "task": "Compare the block's acceleration on two inclined planes with different friction coefficients.",
+      "problem_type": "comparison"
+    },
+    "answer": "The block accelerates more on the lower-friction incline.",
+    "expected_behavior": "The LLM compares acceleration down inclined surfaces and attributes differences to friction.",
+    "reasoning": "Gravity pulls the block down the slope, and friction opposes motion—less friction means more acceleration.",
+    "number_of_objects": "3",
+    "objects": {
+      "object_1": { "name": "block", "object_id": "1" },
+      "object_2": { "name": "incline1", "object_id": "2" },
+      "object_3": { "name": "incline2", "object_id": "3" }
+    },
+    "object_permissions": {
+      "object_1_permissions": { "mass": true, "size": true, "pos": true, "friction": true },
+      "object_2_permissions": { "friction": true, "size": true, "pos": true },
+      "object_3_permissions": { "friction": true, "size": true, "pos": true }
+    }
+  }
+  

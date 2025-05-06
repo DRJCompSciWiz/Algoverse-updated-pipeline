@@ -1,0 +1,18 @@
+{
+    "metadata": {
+      "scene_name": "Rotational Dynamics of a Narrow Door",
+      "task": "Determine the angular acceleration of a denser narrow door when a force is applied.",
+      "problem_type": "calculation"
+    },
+    "answer": "α = τ/I",
+    "expected_behavior": "The LLM uses the increased moment of inertia due to higher density to compute angular acceleration.",
+    "reasoning": "A denser door has greater inertia, reducing the angular acceleration for the same torque.",
+    "number_of_objects": "4",
+    "objects": {
+      "object_1": { "name": "door", "object_id": "1" },
+      "object_2": { "name": "hinge", "object_id": "2" },
+      "object_3": { "name": "support", "object_id": "3" },
+      "object_4": { "name": "surface", "object_id": "4" }
+    }
+  }
+  

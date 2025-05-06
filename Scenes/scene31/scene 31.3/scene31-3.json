@@ -1,0 +1,20 @@
+{
+    "metadata": {
+      "scene_name": "Angular Momentum Conservation - Skater on Rotating Platform",
+      "task": "What happens to the rotation rate when the skater pulls in her arms while standing on a rotating platform?",
+      "problem_type": "conceptual"
+    },
+    "answer": "The rotation rate increases.",
+    "expected_behavior": "The LLM applies conservation of angular momentum to a rotating system.",
+    "reasoning": "As the moment of inertia decreases, angular velocity increases to conserve angular momentum (L = Iω).",
+    "number_of_objects": "2",
+    "objects": {
+      "object_1": { "name": "skater", "object_id": "1" },
+      "object_2": { "name": "platform", "object_id": "2" }
+    },
+    "object_permissions": {
+      "object_1_permissions": { "type": true, "density": true, "mass": true, "size": true, "name": true, "pos": true, "quat": true, "friction": true, "solref": true, "inertia": true, "axis": true, "range": true, "joint": true, "gear": true, "site": true, "texture": true },
+      "object_2_permissions": { "type": true, "density": true, "mass": true, "size": true, "name": true, "pos": true, "quat": true, "friction": true, "solref": true, "inertia": true, "axis": true, "range": true, "joint": true, "gear": true, "site": true, "texture": true }
+    }
+  }
+  

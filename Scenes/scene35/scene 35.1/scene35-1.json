@@ -1,0 +1,18 @@
+{
+    "metadata": {
+      "scene_name": "Double Obstacle Clearance",
+      "task": "Determine the launch angle required to clear both obstacles.",
+      "problem_type": "calculation"
+    },
+    "answer": "solve using projectile trajectory intersection",
+    "expected_behavior": "The LLM calculates the projectile’s height at two different x-positions to ensure it clears both obstacles.",
+    "reasoning": "The LLM applies projectile motion equations to evaluate height at the obstacle positions.",
+    "number_of_objects": "4",
+    "objects": {
+      "object_1": { "name": "projectile", "object_id": "1" },
+      "object_2": { "name": "obstacle_1", "object_id": "2" },
+      "object_3": { "name": "obstacle_2", "object_id": "3" },
+      "object_4": { "name": "ground", "object_id": "4" }
+    }
+  }
+  

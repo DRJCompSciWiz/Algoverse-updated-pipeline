@@ -1,0 +1,17 @@
+{
+    "metadata": {
+      "scene_name": "Chain Sliding Off Sloped Table",
+      "task": "Determine the acceleration of the chain as it slides off a sloped table.",
+      "problem_type": "calculation"
+    },
+    "answer": "a depends on slope angle θ",
+    "expected_behavior": "The LLM accounts for the gravitational component along the slope to find effective acceleration.",
+    "reasoning": "The slope alters the force balance driving the chain off the edge.",
+    "number_of_objects": "3",
+    "objects": {
+      "object_1": { "name": "chain", "object_id": "1" },
+      "object_2": { "name": "sloped_table", "object_id": "2" },
+      "object_3": { "name": "ground", "object_id": "3" }
+    }
+  }
+  

@@ -1,0 +1,20 @@
+{
+    "metadata": {
+      "scene_name": "Mixed Surface Acceleration",
+      "task": "Describe how the block's acceleration changes as it moves from a low-friction to high-friction region.",
+      "problem_type": "comparison"
+    },
+    "answer": "The block slows down when entering the higher-friction region.",
+    "expected_behavior": "The LLM detects a change in resistance and explains the cause in terms of friction.",
+    "reasoning": "As friction increases, net force decreases, reducing acceleration.",
+    "number_of_objects": "2",
+    "objects": {
+      "object_1": { "name": "block", "object_id": "1" },
+      "object_2": { "name": "mixed_surface", "object_id": "2" }
+    },
+    "object_permissions": {
+      "object_1_permissions": { "mass": true, "pos": true, "friction": true },
+      "object_2_permissions": { "friction": true, "size": true }
+    }
+  }
+  

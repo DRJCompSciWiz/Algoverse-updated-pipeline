@@ -1,0 +1,20 @@
+{
+    "metadata": {
+      "scene_name": "Overdamped vs Underdamped Comparison",
+      "task": "Compare the amplitude decay of an overdamped and underdamped oscillator.",
+      "problem_type": "conceptual"
+    },
+    "answer": "Underdamped systems oscillate with decaying amplitude; overdamped systems return slowly without oscillation.",
+    "expected_behavior": "The LLM should distinguish between the two damping regimes.",
+    "reasoning": "The damping ratio determines whether oscillations occur and how quickly the system returns to equilibrium.",
+    "number_of_objects": "6",
+    "objects": {
+      "object_1": { "name": "mass1", "object_id": "1" },
+      "object_2": { "name": "spring1", "object_id": "2" },
+      "object_3": { "name": "damper1", "object_id": "3" },
+      "object_4": { "name": "mass2", "object_id": "4" },
+      "object_5": { "name": "spring2", "object_id": "5" },
+      "object_6": { "name": "damper2", "object_id": "6" }
+    }
+  }
+  

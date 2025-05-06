@@ -1,0 +1,15 @@
+<mujoco>
+  <option gravity="0 0 -9.81"/>
+  <worldbody>
+    <body name="wall" pos="5 0 0">
+      <geom type="box" size="0.2 10 5" friction="0 0 0" rgba="0.6 0.6 0.6 1"/>
+    </body>
+    <body name="ground" pos="0 0 -0.1">
+      <geom type="plane" size="30 30 0.1" friction="0.05 0.05 0.05" rgba="0.8 0.8 0.8 1"/>
+    </body>
+    <body name="ladder" pos="2 0 0">
+      <geom type="box" size="0.2 1 4" rgba="0.5 0.3 0.1 1"/>
+      <joint type="free"/>
+    </body>
+  </worldbody>
+</mujoco>

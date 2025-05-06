@@ -1,0 +1,18 @@
+{
+    "metadata": {
+      "scene_name": "Platform Obstacle",
+      "task": "Determine the launch angle to clear an elevated obstacle on a platform.",
+      "problem_type": "calculation"
+    },
+    "answer": "use kinematics to account for obstacle base height",
+    "expected_behavior": "The LLM calculates the projectile's height at the obstacle’s x-position and ensures it's above the obstacle's top.",
+    "reasoning": "The base height of the obstacle affects how much vertical clearance is needed.",
+    "number_of_objects": "4",
+    "objects": {
+      "object_1": { "name": "projectile", "object_id": "1" },
+      "object_2": { "name": "platform", "object_id": "2" },
+      "object_3": { "name": "obstacle", "object_id": "3" },
+      "object_4": { "name": "ground", "object_id": "4" }
+    }
+  }
+  

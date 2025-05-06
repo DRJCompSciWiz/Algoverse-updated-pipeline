@@ -1,0 +1,15 @@
+{
+    "metadata": {
+      "scene_name": "Horizontal Rocket in Space",
+      "task": "Calculate Δv of a horizontally thrusting rocket in space.",
+      "problem_type": "calculation"
+    },
+    "answer": "Δv = ve ln(m0/m1)",
+    "expected_behavior": "The LLM correctly applies the rocket equation, recognizing the zero-gravity setting.",
+    "reasoning": "With no external forces, the only driver of velocity change is exhaust mass ejection.",
+    "number_of_objects": "1",
+    "objects": {
+      "object_1": { "name": "rocket", "object_id": "1" }
+    }
+  }
+  

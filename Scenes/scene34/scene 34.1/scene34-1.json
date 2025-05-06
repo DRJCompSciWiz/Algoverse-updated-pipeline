@@ -1,0 +1,18 @@
+{
+    "metadata": {
+      "scene_name": "Geometry-Dependent Tipping",
+      "task": "Compare which block—tall thin or wide flat—tips over first as the incline angle increases.",
+      "problem_type": "comparison"
+    },
+    "answer": "The tall thin block tips first.",
+    "expected_behavior": "The LLM compares center of mass and base width to determine critical tipping angle.",
+    "reasoning": "Taller blocks have a higher center of mass relative to their base width, making them easier to tip.",
+    "number_of_objects": "4",
+    "objects": {
+      "object_1": { "name": "tall_block", "object_id": "1" },
+      "object_2": { "name": "wide_block", "object_id": "2" },
+      "object_3": { "name": "inclined_plane", "object_id": "3" },
+      "object_4": { "name": "surface", "object_id": "4" }
+    }
+  }
+  

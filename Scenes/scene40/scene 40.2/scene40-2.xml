@@ -1,0 +1,18 @@
+<mujoco>
+  <option gravity="0 0 -9.81"/>
+  <worldbody>
+    <body name="hinge" pos="0 0 0">
+      <geom type="cylinder" size="0.1 0.05" rgba="0.5 0.5 0.5 1"/>
+    </body>
+    <body name="support" pos="0 0 1">
+      <geom type="box" size="0.2 0.2 0.2" rgba="0.6 0.6 0.6 1"/>
+    </body>
+    <body name="surface" pos="-10 0 -0.1">
+      <geom type="plane" size="30 30 0.1" rgba="0.7 0.7 0.7 1"/>
+    </body>
+    <body name="door" pos="0 2 1">
+      <geom type="box" size="1 0.2 2" density="1" rgba="0.2 0.7 0.7 1"/>
+      <joint name="door_joint" type="hinge" axis="1 0 0"/>
+    </body>
+  </worldbody>
+</mujoco>

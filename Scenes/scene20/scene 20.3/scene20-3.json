@@ -1,0 +1,24 @@
+{
+    "metadata": {
+      "scene_name": "Pulley System Acceleration - Var3",
+      "task": "Determine the acceleration of a pulley system where both masses are equal.",
+      "problem_type": "conceptual"
+    },
+    "answer": "0.0",
+    "expected_behavior": "The LLM should recognize that equal masses result in no net acceleration.",
+    "reasoning": "If m1 = m2, then the net force is zero, so a = 0.",
+    "number_of_objects": "4",
+    "objects": {
+      "object_1": { "name": "mass1", "object_id": "1" },
+      "object_2": { "name": "mass2", "object_id": "2" },
+      "object_3": { "name": "pulley", "object_id": "3" },
+      "object_4": { "name": "surface", "object_id": "4" }
+    },
+    "object_permissions": {
+      "object_1_permissions": { "type": true, "density": true, "mass": true, "size": true, "name": true, "pos": true, "joint": true },
+      "object_2_permissions": { "type": true, "density": true, "mass": true, "size": true, "name": true, "pos": true, "joint": true },
+      "object_3_permissions": { "type": true, "size": true, "name": true, "pos": true },
+      "object_4_permissions": { "type": true, "size": true, "name": true, "pos": true, "friction": true }
+    }
+  }
+  

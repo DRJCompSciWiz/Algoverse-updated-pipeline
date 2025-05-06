@@ -1,0 +1,19 @@
+<mujoco>
+  <option gravity="0 0 -9.81"/>
+  <worldbody>
+    <body name="ramp" pos="0 0 0">
+      <geom type="plane" size="6 10 0.1" rgba="0.5 0.5 0.5 1" friction="0 0 0" quat="0.5 0.866 0 0"/>
+    </body>
+    <body name="surface" pos="-10 0 -10">
+      <geom type="plane" size="30 30 0.1" rgba="0.7 0.7 0.7 1" friction="1 1 1"/>
+    </body>
+    <body name="pendulum" pos="-6 0 3">
+      <geom type="capsule" fromto="0 0 0 0 0 -2" radius="0.06" rgba="0 1 1 1"/>
+      <joint name="pendulum_joint" type="hinge" axis="0 1 0"/>
+    </body>
+    <body name="block" pos="6 0 2">
+      <geom type="box" size="0.5 0.5 0.5" density="0.9" rgba="0.9 0.3 0.2 1" friction="0 0 0"/>
+      <joint name="block_joint" type="free"/>
+    </body>
+  </worldbody>
+</mujoco>

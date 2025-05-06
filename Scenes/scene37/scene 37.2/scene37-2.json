@@ -1,0 +1,17 @@
+{
+    "metadata": {
+      "scene_name": "Asymmetric Fragment Masses",
+      "task": "Determine the velocities of the fragments with unequal masses.",
+      "problem_type": "calculation"
+    },
+    "answer": "m1*v1 = m2*v2 → v1 > v2 if m1 < m2",
+    "expected_behavior": "The LLM uses conservation of momentum to infer that the lighter fragment moves faster.",
+    "reasoning": "To conserve momentum, a lighter object must move faster than a heavier one if they move in opposite directions.",
+    "number_of_objects": "3",
+    "objects": {
+      "object_1": { "name": "object", "object_id": "1" },
+      "object_2": { "name": "light_fragment", "object_id": "2" },
+      "object_3": { "name": "heavy_fragment", "object_id": "3" }
+    }
+  }
+  

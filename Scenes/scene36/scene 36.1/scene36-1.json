@@ -1,0 +1,17 @@
+{
+    "metadata": {
+      "scene_name": "U-Shaped Chain Over Table Edge",
+      "task": "Determine the net acceleration of a U-shaped chain starting to fall from both ends.",
+      "problem_type": "calculation"
+    },
+    "answer": "a = 0 initially, then increases",
+    "expected_behavior": "The LLM reasons that initially, the forces cancel due to symmetry; as one side gains more length, net acceleration begins.",
+    "reasoning": "Symmetry means net force is zero at first; imbalance drives later motion.",
+    "number_of_objects": "3",
+    "objects": {
+      "object_1": { "name": "chain", "object_id": "1" },
+      "object_2": { "name": "table", "object_id": "2" },
+      "object_3": { "name": "ground", "object_id": "3" }
+    }
+  }
+  

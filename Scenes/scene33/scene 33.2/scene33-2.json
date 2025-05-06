@@ -1,0 +1,24 @@
+{
+    "metadata": {
+      "scene_name": "Dual Block Friction Comparison",
+      "task": "Compare how two identical blocks accelerate on surfaces with different friction when the same force is applied.",
+      "problem_type": "comparison"
+    },
+    "answer": "The block on the lower-friction surface accelerates more.",
+    "expected_behavior": "The LLM compares responses to equal forces on different frictions.",
+    "reasoning": "Friction opposes motion—more friction means more resistance and lower acceleration.",
+    "number_of_objects": "4",
+    "objects": {
+      "object_1": { "name": "block1", "object_id": "1" },
+      "object_2": { "name": "block2", "object_id": "2" },
+      "object_3": { "name": "surface1", "object_id": "3" },
+      "object_4": { "name": "surface2", "object_id": "4" }
+    },
+    "object_permissions": {
+      "object_1_permissions": { "mass": true, "pos": true, "friction": true },
+      "object_2_permissions": { "mass": true, "pos": true, "friction": true },
+      "object_3_permissions": { "friction": true },
+      "object_4_permissions": { "friction": true }
+    }
+  }
+  

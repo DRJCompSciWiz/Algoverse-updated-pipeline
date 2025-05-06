@@ -1,0 +1,12 @@
+<mujoco>
+  <option gravity="0 0 -9.81"/>
+  <worldbody>
+    <body name="surface" pos="0 0 -0.1">
+      <geom type="plane" size="20 20 0.1" rgba="0.8 0.8 0.8 1" friction="0.9 0.9 0.9"/>
+    </body>
+    <body name="steel_ball" pos="0 0 3">
+      <geom type="sphere" size="0.25" density="7.8" rgba="0.6 0.6 0.6 1"/>
+      <joint name="steel_joint" type="free"/>
+    </body>
+  </worldbody>
+</mujoco>

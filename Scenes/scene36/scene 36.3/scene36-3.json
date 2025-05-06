@@ -1,0 +1,18 @@
+{
+    "metadata": {
+      "scene_name": "Chain with Weighted End",
+      "task": "Determine how the attached mass affects the chain’s acceleration as it falls.",
+      "problem_type": "calculation"
+    },
+    "answer": "a depends on mass ratio",
+    "expected_behavior": "The LLM models the chain and attached mass as a two-body system, calculating net acceleration.",
+    "reasoning": "The mass at the end increases the downward force and changes the dynamics.",
+    "number_of_objects": "4",
+    "objects": {
+      "object_1": { "name": "chain", "object_id": "1" },
+      "object_2": { "name": "mass", "object_id": "2" },
+      "object_3": { "name": "table", "object_id": "3" },
+      "object_4": { "name": "ground", "object_id": "4" }
+    }
+  }
+  

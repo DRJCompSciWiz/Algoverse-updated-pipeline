@@ -1,0 +1,24 @@
+{
+    "metadata": {
+      "scene_name": "Static Equilibrium with Person on Ladder",
+      "task": "Determine how the person's position affects the ladder's equilibrium against a frictionless wall.",
+      "problem_type": "conceptual"
+    },
+    "answer": "The farther up the ladder the person is, the more torque about the base, increasing the risk of slipping.",
+    "expected_behavior": "The LLM should evaluate how a person's position shifts the center of mass and affects the torque balance.",
+    "reasoning": "Increased height increases torque. With a frictionless wall, equilibrium depends on friction at the base.",
+    "number_of_objects": "4",
+    "objects": {
+      "object_1": { "name": "ladder", "object_id": "1" },
+      "object_2": { "name": "wall", "object_id": "2" },
+      "object_3": { "name": "ground", "object_id": "3" },
+      "object_4": { "name": "person", "object_id": "4" }
+    },
+    "object_permissions": {
+      "object_1_permissions": { "mass": true, "size": true, "pos": true, "friction": true, "inertia": true },
+      "object_2_permissions": { "friction": true, "pos": true, "size": true },
+      "object_3_permissions": { "friction": true },
+      "object_4_permissions": { "mass": true, "pos": true, "size": true }
+    }
+  }
+  

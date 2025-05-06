@@ -1,0 +1,17 @@
+{
+    "metadata": {
+      "scene_name": "Moving Obstacle",
+      "task": "Determine the launch angle and timing required to clear a moving obstacle.",
+      "problem_type": "temporal calculation"
+    },
+    "answer": "compute time of flight and obstacle motion",
+    "expected_behavior": "The LLM considers projectile time of flight and horizontal position of the obstacle over time.",
+    "reasoning": "The projectile must arrive at the x-position after the obstacle has passed.",
+    "number_of_objects": "3",
+    "objects": {
+      "object_1": { "name": "projectile", "object_id": "1" },
+      "object_2": { "name": "moving_obstacle", "object_id": "2" },
+      "object_3": { "name": "ground", "object_id": "3" }
+    }
+  }
+  

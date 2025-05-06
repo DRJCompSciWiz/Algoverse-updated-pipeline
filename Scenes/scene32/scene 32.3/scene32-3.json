@@ -1,0 +1,22 @@
+{
+    "metadata": {
+      "scene_name": "Ladder with Frictional Wall",
+      "task": "Analyze how wall friction alters equilibrium conditions.",
+      "problem_type": "conceptual"
+    },
+    "answer": "Wall friction helps balance torques and allows equilibrium with a steeper angle or heavier load.",
+    "expected_behavior": "The LLM includes wall friction in the force and torque analysis.",
+    "reasoning": "Friction at the wall can provide a horizontal force component, contributing to torque balance.",
+    "number_of_objects": "3",
+    "objects": {
+      "object_1": { "name": "ladder", "object_id": "1" },
+      "object_2": { "name": "wall", "object_id": "2" },
+      "object_3": { "name": "ground", "object_id": "3" }
+    },
+    "object_permissions": {
+      "object_1_permissions": { "mass": true, "size": true, "pos": true },
+      "object_2_permissions": { "friction": true },
+      "object_3_permissions": { "friction": true }
+    }
+  }
+  

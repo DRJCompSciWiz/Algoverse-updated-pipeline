@@ -1,0 +1,17 @@
+{
+  "metadata": {
+    "scene_name": "Tipping Comparison: Box vs. Cylinder",
+    "task": "Determine which shape—box or cylinder—tips over more easily as the incline increases.",
+    "problem_type": "comparison"
+  },
+  "answer": "The box tips more easily due to its edges.",
+  "expected_behavior": "The LLM assesses how shape and base contact area influence tipping.",
+  "reasoning": "The cylinder can roll and has a lower center of mass distribution, while the box may pivot over a corner.",
+  "number_of_objects": "4",
+  "objects": {
+    "object_1": { "name": "box", "object_id": "1" },
+    "object_2": { "name": "cylinder", "object_id": "2" },
+    "object_3": { "name": "inclined_plane", "object_id": "3" },
+    "object_4": { "name": "surface", "object_id": "4" }
+  }
+}

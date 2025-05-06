@@ -1,0 +1,15 @@
+<mujoco>
+  <option gravity="0 0 -9.81"/>
+  <worldbody>
+    <body name="incline1" pos="-5 0 0" quat="0.707 0 0 0.707">
+      <geom type="plane" size="20 20 0.1" friction="0.2 0.2 0.2" rgba="0.8 0.8 0.8 1"/>
+    </body>
+    <body name="incline2" pos="5 0 0" quat="0.707 0 0 0.707">
+      <geom type="plane" size="20 20 0.1" friction="1.0 1.0 1.0" rgba="0.8 0.8 0.8 1"/>
+    </body>
+    <body name="block" pos="0 0 0.5">
+      <geom type="box" size="0.5 0.5 0.5" density="1" rgba="0.3 0.7 0.3 1"/>
+      <joint type="free"/>
+    </body>
+  </worldbody>
+</mujoco>

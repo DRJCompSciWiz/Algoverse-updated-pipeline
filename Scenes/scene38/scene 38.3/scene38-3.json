@@ -1,0 +1,16 @@
+{
+    "metadata": {
+      "scene_name": "Rocket with Exhaust Mass",
+      "task": "Analyze the effect of exhaust ejection on rocket velocity.",
+      "problem_type": "calculation"
+    },
+    "answer": "Δv = ve ln(m0/m1) with exhaust mass reducing total mass",
+    "expected_behavior": "The LLM recognizes the exhaust mass as the propellant and applies the equation using initial and final mass.",
+    "reasoning": "Velocity gain depends on how much mass is expelled and the exhaust velocity.",
+    "number_of_objects": "2",
+    "objects": {
+      "object_1": { "name": "rocket", "object_id": "1" },
+      "object_2": { "name": "exhaust", "object_id": "2" }
+    }
+  }
+  

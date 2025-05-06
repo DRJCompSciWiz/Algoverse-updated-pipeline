@@ -1,0 +1,16 @@
+<mujoco>
+  <option gravity="0 0 -9.81"/>
+  <worldbody>
+    <body name="support_high" pos="0 0 2.5">
+      <geom type="sphere" size="0.15" rgba="0.4 0.4 0.4 1"/>
+    </body>
+    <body name="pendulum1_short" pos="-1 0 2.5">
+      <geom type="capsule" fromto="0 0 0 0 0 -0.6" radius="0.04" rgba="0.7 0.3 0.3 1"/>
+      <joint name="pendulum1_joint" type="hinge" axis="0 1 0"/>
+    </body>
+    <body name="pendulum2_short" pos="-1 0 1.9">
+      <geom type="capsule" fromto="0 0 0 0 0 -0.6" radius="0.04" rgba="0.3 0.3 0.7 1"/>
+      <joint name="pendulum2_joint" type="hinge" axis="0 1 0"/>
+    </body>
+  </worldbody>
+</mujoco>

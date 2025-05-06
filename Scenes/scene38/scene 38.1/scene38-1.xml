@@ -1,0 +1,9 @@
+<mujoco>
+  <option gravity="0 0 -9.81"/>
+  <worldbody>
+    <body name="rocket" pos="0 0 0.5">
+      <geom type="cylinder" size="0.3 2" density="1" rgba="1 0.5 0 1"/>
+      <joint name="rocket_joint" type="free"/>
+    </body>
+  </worldbody>
+</mujoco>

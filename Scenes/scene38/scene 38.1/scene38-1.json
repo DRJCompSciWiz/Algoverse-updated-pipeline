@@ -1,0 +1,15 @@
+{
+    "metadata": {
+      "scene_name": "Rocket Launch Against Gravity",
+      "task": "Determine the theoretical change in velocity of a rocket launched vertically.",
+      "problem_type": "calculation"
+    },
+    "answer": "Δv = ve ln(m0/m1) (ignoring gravity losses)",
+    "expected_behavior": "The LLM uses the Tsiolkovsky equation to calculate velocity change, assuming no drag or gravity losses.",
+    "reasoning": "In an idealized case, the velocity change depends only on exhaust velocity and mass ratio.",
+    "number_of_objects": "1",
+    "objects": {
+      "object_1": { "name": "rocket", "object_id": "1" }
+    }
+  }
+  
