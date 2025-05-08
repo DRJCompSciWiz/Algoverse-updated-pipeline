@@ -1,0 +1,24 @@
+{
+    "metadata": {
+      "scene_name": "Elevator Apparent Weight - Fast Acceleration",
+      "task": "Determine the direction of elevator acceleration from the scale reading.",
+      "problem_type": "noninertial_frames"
+    },
+    "answer": "If scale reads significantly more than weight, elevator is accelerating upward quickly.",
+    "expected_behavior": "LLM compares reading to expected mg.",
+    "reasoning": "Greater deviation from mg implies greater acceleration.",
+    "number_of_objects": "4",
+    "objects": {
+      "object_1": {"name": "elevator", "object_id": "1"},
+      "object_2": {"name": "block", "object_id": "2"},
+      "object_3": {"name": "scale", "object_id": "3"},
+      "object_4": {"name": "shaft", "object_id": "4"}
+    },
+    "object_permissions": {
+      "object_1_permissions": {"type": true, "pos": true, "velocity": true},
+      "object_2_permissions": {"mass": true},
+      "object_3_permissions": {"force_sensor": true},
+      "object_4_permissions": {"type": true}
+    }
+  }
+  

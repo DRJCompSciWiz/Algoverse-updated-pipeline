@@ -1,0 +1,26 @@
+{
+    "metadata": {
+      "scene_name": "Rolling vs Sliding - Steeper Drop",
+      "task": "Determine which sphere reaches the bottom faster on a shorter but steeper slope.",
+      "problem_type": "rotational_dynamics"
+    },
+    "answer": "Sliding sphere still reaches the bottom first due to no rotational energy loss.",
+    "expected_behavior": "LLM observes descent times and relative finish order.",
+    "reasoning": "Even on steeper slopes, sliding is faster when there's no rolling resistance.",
+    "number_of_objects": "5",
+    "objects": {
+      "object_1": {"name": "rolling_sphere", "object_id": "1"},
+      "object_2": {"name": "sliding_sphere", "object_id": "2"},
+      "object_3": {"name": "slope", "object_id": "3"},
+      "object_4": {"name": "ground", "object_id": "4"},
+      "object_5": {"name": "goal_line", "object_id": "5"}
+    },
+    "object_permissions": {
+      "object_1_permissions": {"type": true, "mass": true, "friction": true, "inertia": true},
+      "object_2_permissions": {"type": true, "mass": true, "friction": true},
+      "object_3_permissions": {"type": true},
+      "object_4_permissions": {"type": true},
+      "object_5_permissions": {"type": true}
+    }
+  }
+  

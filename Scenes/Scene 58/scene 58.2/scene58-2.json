@@ -1,0 +1,26 @@
+{
+    "metadata": {
+      "scene_name": "Center of Mass Balance - Long Plank Small Masses",
+      "task": "Place the third mass to balance two small masses placed at ends of a long plank.",
+      "problem_type": "balance"
+    },
+    "answer": "3",
+    "expected_behavior": "LLM calculates torque due to long lever arms.",
+    "reasoning": "Even small masses create significant torque if placed far from center.",
+    "number_of_objects": "5",
+    "objects": {
+      "object_1": { "name": "mass_left", "object_id": "1" },
+      "object_2": { "name": "mass_right", "object_id": "2" },
+      "object_3": { "name": "mass_to_place", "object_id": "3" },
+      "object_4": { "name": "plank", "object_id": "4" },
+      "object_5": { "name": "ground", "object_id": "5" }
+    },
+    "object_permissions": {
+      "object_1_permissions": { "mass": true, "pos": true },
+      "object_2_permissions": { "mass": true, "pos": true },
+      "object_3_permissions": { "mass": true, "pos": true },
+      "object_4_permissions": { "mass": true, "size": true },
+      "object_5_permissions": { "type": true }
+    }
+  }
+  

@@ -1,0 +1,24 @@
+{
+    "metadata": {
+      "scene_name": "Projectile Launch Angle - Range vs Height",
+      "task": "Evaluate the relationship between maximum height and horizontal range for projectiles launched at different angles.",
+      "problem_type": "projectile_motion"
+    },
+    "answer": "The projectile launched at a higher angle reaches a greater height, whereas the one launched at a lower angle has a greater range.",
+    "expected_behavior": "LLM measures the trajectories of both projectiles and identifies key metrics such as height and range.",
+    "reasoning": "The vertical velocity component increases with launch angle, increasing height, while the horizontal component changes the range.",
+    "number_of_objects": "4",
+    "objects": {
+      "object_1": {"name": "projectile_1", "object_id": "1"},
+      "object_2": {"name": "projectile_2", "object_id": "2"},
+      "object_3": {"name": "launch_platform", "object_id": "3"},
+      "object_4": {"name": "ground", "object_id": "4"}
+    },
+    "object_permissions": {
+      "object_1_permissions": {"type": true, "mass": true, "pos": true, "velocity": true},
+      "object_2_permissions": {"type": true, "mass": true, "pos": true, "velocity": true},
+      "object_3_permissions": {"type": true},
+      "object_4_permissions": {"type": true}
+    }
+  }
+  

@@ -1,0 +1,26 @@
+{
+    "metadata": {
+      "scene_name": "Rolling vs Sliding - Low Roller Friction",
+      "task": "Compare time to reach bottom when the rolling sphere has lower friction.",
+      "problem_type": "rotational_dynamics"
+    },
+    "answer": "Still, sliding wins unless roller has enough friction to engage rotation effectively.",
+    "expected_behavior": "LLM observes if the roller rolls or slides and time to goal line.",
+    "reasoning": "Insufficient friction prevents effective rolling, acting more like sliding.",
+    "number_of_objects": "5",
+    "objects": {
+      "object_1": {"name": "rolling_sphere", "object_id": "1"},
+      "object_2": {"name": "sliding_sphere", "object_id": "2"},
+      "object_3": {"name": "slope", "object_id": "3"},
+      "object_4": {"name": "ground", "object_id": "4"},
+      "object_5": {"name": "goal_line", "object_id": "5"}
+    },
+    "object_permissions": {
+      "object_1_permissions": {"type": true, "mass": true, "friction": true, "inertia": true},
+      "object_2_permissions": {"type": true, "mass": true, "friction": true},
+      "object_3_permissions": {"type": true},
+      "object_4_permissions": {"type": true},
+      "object_5_permissions": {"type": true}
+    }
+  }
+  

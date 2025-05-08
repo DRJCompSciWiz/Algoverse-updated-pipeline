@@ -1,0 +1,26 @@
+{
+    "metadata": {
+      "scene_name": "Rolling vs Sliding - Unequal Mass",
+      "task": "Compare spheres with different masses: does mass affect who reaches bottom first?",
+      "problem_type": "rotational_dynamics"
+    },
+    "answer": "Mass does not affect the result; sliding still reaches first due to energy distribution.",
+    "expected_behavior": "LLM notes same finish order despite different masses.",
+    "reasoning": "Time of descent for both is independent of mass in ideal conditions.",
+    "number_of_objects": "5",
+    "objects": {
+      "object_1": {"name": "rolling_sphere", "object_id": "1"},
+      "object_2": {"name": "sliding_sphere", "object_id": "2"},
+      "object_3": {"name": "slope", "object_id": "3"},
+      "object_4": {"name": "ground", "object_id": "4"},
+      "object_5": {"name": "goal_line", "object_id": "5"}
+    },
+    "object_permissions": {
+      "object_1_permissions": {"type": true, "mass": true, "friction": true, "inertia": true},
+      "object_2_permissions": {"type": true, "mass": true, "friction": true},
+      "object_3_permissions": {"type": true},
+      "object_4_permissions": {"type": true},
+      "object_5_permissions": {"type": true}
+    }
+  }
+  

@@ -1,0 +1,22 @@
+{
+    "metadata": {
+      "scene_name": "Static Friction Threshold - Heavy Block",
+      "task": "Find the minimum force needed to slide a heavier block.",
+      "problem_type": "friction"
+    },
+    "answer": "F = μ * mg; higher mass → higher friction threshold.",
+    "expected_behavior": "LLM increases force due to increased weight.",
+    "reasoning": "Normal force is larger due to mass, so static friction is stronger.",
+    "number_of_objects": "3",
+    "objects": {
+      "object_1": {"name": "block", "object_id": "1"},
+      "object_2": {"name": "table", "object_id": "2"},
+      "object_3": {"name": "ground", "object_id": "3"}
+    },
+    "object_permissions": {
+      "object_1_permissions": {"mass": true, "friction": true, "pos": true},
+      "object_2_permissions": {"type": true},
+      "object_3_permissions": {"type": true}
+    }
+  }
+  

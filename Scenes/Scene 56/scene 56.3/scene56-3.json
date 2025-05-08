@@ -1,0 +1,30 @@
+{
+    "metadata": {
+      "scene_name": "Elevator Apparent Weight - Two Elevators",
+      "task": "Determine which elevator is accelerating upward by comparing scale readings.",
+      "problem_type": "noninertial_frames"
+    },
+    "answer": "Elevator with higher scale reading is accelerating upward.",
+    "expected_behavior": "LLM compares scale forces in both elevators.",
+    "reasoning": "Greater apparent weight implies upward acceleration.",
+    "number_of_objects": "7",
+    "objects": {
+      "object_1": {"name": "elevator_A", "object_id": "1"},
+      "object_2": {"name": "block_A", "object_id": "2"},
+      "object_3": {"name": "scale_A", "object_id": "3"},
+      "object_4": {"name": "elevator_B", "object_id": "4"},
+      "object_5": {"name": "block_B", "object_id": "5"},
+      "object_6": {"name": "scale_B", "object_id": "6"},
+      "object_7": {"name": "shaft", "object_id": "7"}
+    },
+    "object_permissions": {
+      "object_1_permissions": {"type": true, "velocity": true},
+      "object_2_permissions": {"mass": true},
+      "object_3_permissions": {"force_sensor": true},
+      "object_4_permissions": {"type": true, "velocity": true},
+      "object_5_permissions": {"mass": true},
+      "object_6_permissions": {"force_sensor": true},
+      "object_7_permissions": {"type": true}
+    }
+  }
+  
