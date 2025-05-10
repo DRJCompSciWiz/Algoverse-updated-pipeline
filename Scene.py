@@ -2,162 +2,218 @@ import json
 import os
 import numpy as np
 import Simulator
+import xml.etree.ElementTree as ET
 
 class Scene:
-    """
-    Represents a physics-based scene loaded from a JSON file. This class interacts with a simulator to 
-    analyze and manipulate objects in the scene.
-    """
-    
-    def __init__(self, scene_id: str, simulator: Simulator):
-        """
-        Initializes the Scene object by loading scene data from a JSON file.
+    def __init__(self, scene_id: str):
+        self.scene_float = float(scene_id.split("_")[1])
+        self.scene_number = int(self.scene_float)
+        script_dir = os.path.dirname(os.path.abspath(__file__))  # e.g., .../Algoverse-updated-pipeline
+        base_dir = os.path.join(script_dir, "Scenes", f"Scene{self.scene_number}")
+        if self.scene_number > 200: # This runs the toy scenes (the scenes that test the simulator functions to see if they work)
+            self.scene_data = os.path.join(base_dir,f"scene{self.scene_number}.json")
+            self.scene_xml = os.path.join(base_dir, f"scene{self.scene_number}.xml")
+        else: #This is for the rest of the scenes (the ones that are used for the actual experiments)
+            self.scene_data = os.path.join(base_dir, f"Scene{self.scene_float}", f"scene{self.scene_float}.json")
+            self.scene_xml = os.path.join(base_dir, f"Scene{self.scene_float}", f"scene{self.scene_float}.xml")
+
+        with open(self.scene_data, 'r') as file:
+            scene_data = json.load(file)
+            
+        self.scene_desc = scene_data["metadata"]["scene_name"]
+        self.scene_task = scene_data["metadata"]["task"]
+        self.problem_type = scene_data["metadata"]["problem_type"]
+        self.objects = scene_data["objects"]
+        self.object_permissions = scene_data["object_permissions"]
         
-        Args:
-            scene_id (str): The unique identifier for the scene.
-            simulator (Simulator): The simulator instance used for interaction.
-        """
-        self.scene_id = scene_id
-        self.simulator = simulator  # Store the simulator object
-        self.scene_number = int(scene_id.split("_")[-1])
-        self.terminal = "siddh"  # For setting it up, switch this to: "robin", "abhinav", or "sid".
-        
-        # Construct file path based on the terminal setting
-        if self.terminal == "utkarsh":
-            base_dir = r"C:\Users\inbox\OneDrive\Desktop\Algoverse-updated-pipeline\Scenes"
-            self.file_path = os.path.join(base_dir, f"Scene{self.scene_number}", f"scene{self.scene_number}.json")
-        elif self.terminal == "robin":
-            base_dir = r"C:\Users\robin\OneDrive\Documents\Algoverse\MuJoCo-Testing-Algoverse-main\Scenes"
-            self.file_path = os.path.join(base_dir, f"Scene{self.scene_number}", f"scene{self.scene_number}.json")
-        elif self.terminal == "abhinav":
-            base_dir = r"C:\Users\epicg\Algoverse\MuJoCo-Testing-Algoverse\Scenes"
-            self.file_path = os.path.join(base_dir, f"Scene{self.scene_number}", f"scene{self.scene_number}.json")
-        elif self.terminal == "sid":
-            base_dir = r"C:\Users\siddh\OneDrive\Desktop\Algoverse\MuJoCo-Testing-Algoverse\Scenes"
-            self.file_path = os.path.join(base_dir, f"Scene{self.scene_number}", f"scene{self.scene_number}.json")
+        # Parse the XML to get initial positions and sizes for objects
+        self.xml_data = ET.fromstring(self.scene_xml)
+        self.initial_positions = self.get_initial_positions_from_xml()
+        self.sizes = self.get_sizes_from_xml()
+        self.quaternions = self.get_quaternions_from_xml()
 
-        print("Looking for file at:", self.file_path)
-        
-        # Load the JSON data if it exists
-        if os.path.exists(self.file_path):
-            print("File successfully found")
-            with open(self.file_path, "r") as file:
-                self.data = json.load(file)
-        else:
-            print("File not found")
-            self.data = None
+    def get_initial_positions_from_xml(self):
+        positions = {}
+        for body in self.xml_data.findall(".//body"):
+            name = body.get("name")
+            pos = body.get("pos")
+            if pos:
+                positions[name] = list(map(float, pos.split()))
+        return positions
 
-        # Initialize attributes with default values
-        self.scene_desc = ""
-        self.scene_task = ""
-        self.problem_type = ""
-        self.prompt = ""
-        self.permissions = ""
-        self.objects = ""
-        self.answer = ""
-        self.expected_behavior = ""
-        self.reasoning = ""
-        self.object_list = []  # Will be populated from JSON
-        self.object_permissions = {}
+    def get_sizes_from_xml(self):
+        sizes = {}
+        for body in self.xml_data.findall(".//body"):
+            name = body.get("name")
+            geom = body.find(".//geom")
+            if geom is not None:
+                size = geom.get("size")
+                if size:
+                    sizes[name] = size
+        return sizes
 
-        # Parse the metadata and objects from the JSON
-        self.metadata()
-        self.extract_objects_id_names_and_permissions()
+    def get_quaternions_from_xml(self):
+        quaternions = {}
+        for body in self.xml_data.findall(".//body"):
+            name = body.get("name")
+            quat = body.get("quat")
+            if quat:
+                quaternions[name] = list(map(float, quat.split()))
+        return quaternions
 
-    def metadata(self):
-        """
-        Extracts metadata from the scene JSON file and assigns it to class attributes.
-        """
-        metadata = self.data.get("metadata", {})  # Use an empty dict as fallback
-        # Use JSON keys as in your example: "scene_name", "task", "problem_type"
-        self.scene_desc = str(metadata.get("scene_name", "No description available"))
-        self.scene_task = str(metadata.get("task", "No task description available"))
-        self.problem_type = str(metadata.get("problem_type", "general"))
+    def get_friction_from_xml(self):
+        friction = {}
+        for body in self.xml_data.findall(".//body"):
+            name = body.get("name")
+            geom = body.find(".//geom")
+            if geom is not None:
+                friction_value = geom.get("friction")
+                if friction_value:
+                    friction[name] = friction_value
+        return friction
 
-    def extract_objects_id_names_and_permissions(self):
-        """
-        Extracts object IDs, names, and permissions from the scene data and stores them in class attributes.
-        """
-        self.object_list = []
-        self.object_permissions = {}
+    def get_solref_from_xml(self):
+        solref = {}
+        for body in self.xml_data.findall(".//body"):
+            name = body.get("name")
+            geom = body.find(".//geom")
+            if geom is not None:
+                solref_value = geom.get("solref")
+                if solref_value:
+                    solref[name] = solref_value
+        return solref
 
-        try:
-            num_objects = int(self.data.get("number_of_objects", "0"))
-        except ValueError:
-            num_objects = 0  
+    def get_solimp_from_xml(self):
+        solimp = {}
+        for body in self.xml_data.findall(".//body"):
+            name = body.get("name")
+            geom = body.find(".//geom")
+            if geom is not None:
+                solimp_value = geom.get("solimp")
+                if solimp_value:
+                    solimp[name] = solimp_value
+        return solimp
 
-        objects_data = self.data.get("objects", {})
-        permissions_data = self.data.get("object_permissions", {})
+    def get_inertia_from_xml(self):
+        inertia = {}
+        for body in self.xml_data.findall(".//body"):
+            name = body.get("name")
+            geom = body.find(".//geom")
+            if geom is not None:
+                inertia_value = geom.get("inertia")
+                if inertia_value:
+                    inertia[name] = inertia_value
+        return inertia
 
-        if not isinstance(objects_data, dict) or not isinstance(permissions_data, dict):
-            return  
+    def get_axis_from_xml(self):
+        axis = {}
+        for actuator in self.xml_data.findall(".//actuator"):
+            name = actuator.get("name")
+            axis_value = actuator.get("axis")
+            if axis_value:
+                axis[name] = axis_value
+        return axis
 
-        for i in range(1, num_objects + 1):
-            object_key = f"object_{i}"
-            permission_key = f"object_{i}_permissions"
-            if object_key in objects_data:
-                obj = objects_data[object_key]
-                self.object_list.append({
-                    "object_id": obj.get("object_id", f"Unknown_{i}"),
-                    "name": obj.get("name", f"Unnamed Object {i}")
-                })
-            if permission_key in permissions_data:
-                # We key the permissions by the object_id we just extracted
-                self.object_permissions[obj.get("object_id", f"Unknown_{i}")] = permissions_data[permission_key]
+    def get_joint_type_from_xml(self):
+        joint_types = {}
+        for actuator in self.xml_data.findall(".//actuator"):
+            name = actuator.get("name")
+            joint_type_value = actuator.get("type")
+            if joint_type_value:
+                joint_types[name] = joint_type_value
+        return joint_types
 
-    def tool_mapping(self):
-        """
-        Defines available tools and their corresponding simulator functions.
-        
-        Returns:
-            dict: A dictionary mapping tool names to their respective simulator functions.
-        """
-        return {
-            "get_displacement": self.simulator.get_displacement,
-            "compute_force": self.simulator.compute_force,
-            "get_acceleration": self.simulator.get_acceleration,
-            "set_velocity": self.simulator.set_velocity,
-            "apply_force": self.simulator.apply_force,
-            "apply_torque": self.simulator.apply_torque,
-            "get_velocity": self.simulator.get_velocity,
-            "detect_collision": self.simulator.detect_collision,
-            "get_parameters": self.simulator.get_parameters,
-            "move_object": self.simulator.move_object,
-            "get_position": self.simulator.get_position,
-            "get_kinetic_energy": self.simulator.get_kinetic_energy,
-            "get_potential_energy": self.simulator.get_potential_energy,
-            "get_momentum": self.simulator.get_momentum,
-            "get_torque": self.simulator.get_torque,
-            "get_center_of_mass": self.simulator.get_center_of_mass,
-            "get_angular_momentum": self.simulator.get_angular_momentum,
-            "change_position": self.simulator.change_position,
-            "quat_to_rot_matrix": self.simulator.quat_to_rot_matrix,
-        }
+    def get_joint_from_xml(self):
+        joints = {}
+        for actuator in self.xml_data.findall(".//actuator"):
+            name = actuator.get("name")
+            joint_value = actuator.get("joint")
+            if joint_value:
+                joints[name] = joint_value
+        return joints
+
+    def get_gear_from_xml(self):
+        gear = {}
+        for actuator in self.xml_data.findall(".//actuator"):
+            name = actuator.get("name")
+            gear_value = actuator.get("gear")
+            if gear_value:
+                gear[name] = gear_value
+        return gear
+
+    def get_sensor_type_from_xml(self):
+        sensor_types = {}
+        for sensor in self.xml_data.findall(".//sensor"):
+            name = sensor.get("name")
+            sensor_type_value = sensor.get("type")
+            if sensor_type_value:
+                sensor_types[name] = sensor_type_value
+        return sensor_types
+
+    def get_site_from_xml(self):
+        sites = {}
+        for site in self.xml_data.findall(".//site"):
+            name = site.get("name")
+            site_value = site.get("site")
+            if site_value:
+                sites[name] = site_value
+        return sites
+
+    def get_rgba_from_xml(self):
+        rgba = {}
+        for body in self.xml_data.findall(".//body"):
+            name = body.get("name")
+            geom = body.find(".//geom")
+            if geom is not None:
+                rgba_value = geom.get("rgba")
+                if rgba_value:
+                    rgba[name] = rgba_value
+        return rgba
+
+    def get_texture_from_xml(self):
+        textures = {}
+        for body in self.xml_data.findall(".//body"):
+            name = body.get("name")
+            geom = body.find(".//geom")
+            if geom is not None:
+                texture_value = geom.get("texture")
+                if texture_value:
+                    textures[name] = texture_value
+        return textures
 
     def generate_prompt(self):
         """
-        Generates a formatted prompt using all parts of the JSON file, as well as the tool mapping.
-
-        Returns:
-            str: The structured prompt guiding interaction with the simulation environment.
+        Generates a dynamic prompt using all parts of the JSON file, as well as the tool mapping.
         """
-        # Format the objects list as a string
-        self.objects_str = ", ".join(
-            [f"{obj['object_id']} ({obj['name']})" for obj in self.object_list]
-        ) if self.object_list else "No objects found."
+        objects_str = ""
+        for obj_id, obj_data in self.objects.items():
+            obj_name = obj_data["name"]
+            permissions = obj_data["permissions"]
 
-        # Format the permissions string
-        self.permissions_str = ""
-        for obj in self.object_list:
-            obj_id = obj["object_id"]
-            obj_name = obj["name"]
-            if obj_id in self.object_permissions:
-                perms = self.object_permissions[obj_id]
-                permissions_details = "\n    ".join(
-                    [f"{key}: {'can be accessed' if value else 'cannot be accessed'}" 
-                     for key, value in perms.items()]
-                )
-                self.permissions_str += f"\n- {obj_name} (ID: {obj_id}):\n    {permissions_details}"
+            # Check permissions and extract data if accessible
+            init_pos = self.get_initial_positions_from_xml() if "pos" in permissions else "n/a"
+            size = self.get_sizes_from_xml() if "size" in permissions else "n/a"
+            quaternion = self.get_quaternions_from_xml() if "rot" in permissions else "n/a"
+            friction = self.get_friction_from_xml() if "friction" in permissions else "n/a"
+            solref = self.get_solref_from_xml() if "solref" in permissions else "n/a"
+            solimp = self.get_solimp_from_xml() if "solimp" in permissions else "n/a"
+            inertia = self.get_inertia_from_xml() if "inertia" in permissions else "n/a"
+            axis = self.get_axis_from_xml() if "axis" in permissions else "n/a"
+            joint_type = self.get_joint_type_from_xml() if "joint_type" in permissions else "n/a"
+            joint = self.get_joint_from_xml() if "joint" in permissions else "n/a"
+            gear = self.get_gear_from_xml() if "gear" in permissions else "n/a"
+            sensor_type = self.get_sensor_type_from_xml() if "sensor_type" in permissions else "n/a"
+            site = self.get_site_from_xml() if "site" in permissions else "n/a"
+            rgba = self.get_rgba_from_xml() if "rgba" in permissions else "n/a"
+            texture = self.get_texture_from_xml() if "texture" in permissions else "n/a"
+
+            objects_str += f"Object id: {obj_data['object_id']}, Object name: {obj_name}, Init pos: {init_pos}, size: {size}, Quaternion: {quaternion}, friction: {friction}, solref: {solref}, solimp: {solimp}, inertia: {inertia}, axis: {axis}, joint_type: {joint_type}, joint: {joint}, gear: {gear}, sensor_type: {sensor_type}, site: {site}, rgba: {rgba}, texture: {texture}\n"
+
+        # Add explanation for quaternion
+        objects_str += "\nQuaternion: A quaternion is used to represent rotation in 3D space. The four numbers represent rotations along the X, Y, Z axes and a scalar component.\n"
+
+        # Add the note about 'n/a' attributes
+        objects_str += "\nIf an attribute has 'n/a' right beside it, that means you CANNOT access that attributes value, so keep that in mind when running through the experiment.\n"
 
         # Define the tool mapping string (as a literal string)
         tools = [
@@ -182,58 +238,13 @@ class Scene:
         ]
 
         tools_str = json.dumps(tools, indent=2)
-
-        permission_explanations_dict = {
-            "density": "This is the permission to figure out the density of the object.",
-            "mass": "This is the permission to find out how much the object weighs.",
-            "radius": "This lets you access the object's radius, which may affect rolling or collisions.",
-            "type": "This is the permission to know what type of object this is (e.g., sphere, plane).",
-            "name": "This lets you retrieve the name of the object.",
-            "pos": "This allows access to the current position of the object.",
-            "size": "This gives access to the object's bounding dimensions (like length, width, height).",
-            "vel": "This allows access to the linear velocity of the object.",
-            "acc": "This allows access to the linear acceleration of the object.",
-            "rot": "This gives access to the object's orientation, usually in quaternion or rotation matrix form.",
-            "angvel": "This gives access to the object's angular velocity (how fast it's spinning).",
-            "angacc": "This gives access to the object's angular acceleration (how quickly its rotation is changing).",
-            "inertia": "This describes the object's rotational inertia (resistance to changes in rotation).",
-            "friction": "This gives access to how much the object resists sliding (static/dynamic friction coefficients).",
-            "restitution": "This describes how bouncy the object is — how much energy it retains after collision.",
-            "material": "This lets you access the material properties (e.g., metal, rubber) which affect physics and visuals.",
-            "color": "This allows access to the object's visual appearance in terms of RGB color.",
-            "texture": "This gives access to the texture applied to the object’s surface.",
-            "contact": "This provides information about whether the object is in contact with another and details of that contact.",
-            "geom": "This refers to the object's collision geometry — what shape MuJoCo uses to detect contact.",
-            "joint": "This allows access to the joint configuration if the object is part of an articulated system.",
-            "qpos": "This is the generalized position state — includes both location and joint states.",
-            "qvel": "This is the generalized velocity state — includes both linear and angular motion.",
-            "xfrc_applied": "This provides access to external forces and torques applied to the object.",
-            "torque": "This gives access to the torque currently acting on the object.",
-            "force": "This provides information about the total net force acting on the object.",
-            "com": "This gives the position of the object’s center of mass in world coordinates.",
-            "parentid": "This allows access to the object's parent in the scene hierarchy (for multi-body systems).",
-            "childid": "This gives access to the object's child links or bodies, if any."
-        }
-
-        # Collect union of all permission keys from all objects
-        used_permissions = set()
-        for perms in self.object_permissions.values():
-            used_permissions.update(perms.keys())
-
-        # Output unique permission explanations once
-        permission_explanations = "\n".join([
-            f"  - {key}: {permission_explanations_dict.get(key, 'No description available.')}"
-            for key in sorted(used_permissions)
-        ])
         
         # Construct the final prompt using all information
         self.prompt = (
             f"You are trying to analyze a physics problem given by the scene_id. The goal is to interact with the environment to determine a correct numeric answer.\n"
             f"\nScene Description: {self.scene_desc}."
             f"\nTask: {self.scene_task}."
-            f"\nAvailable Objects: {self.objects_str}"
-            f"\n\nPermissions per Object:{self.permissions_str}"
-            f"\n\nThis is also a list of all the description of an object's permissions and what each of them means:\n{permission_explanations}"
+            f"\nAvailable Objects and Parameters:\n{objects_str}"
             f"\n\nYou may use the following tools along with their description to interact with the scene. These functions accept parameters given below, and return data or perform simulation updates:\n{tools_str}"
             f"\n\nEvery time you call a tool, you will receive a dictionary containing the outputs. For example, if you call `get_velocity` on `object_1`, the return might be:"
             f'\n{{"vx": 0.0, "vy": -3.2, "vz": 0.0}}'

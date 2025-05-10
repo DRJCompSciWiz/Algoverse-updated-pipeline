@@ -4,17 +4,17 @@ import logging
 from dotenv import load_dotenv
 from Simulator import Simulator
 from Scene import Scene
-from OpenAIAgent import OpenAIAgent
+from AgentClass import OpenAIAgent
 from typing import Any, Dict, List
 from datetime import datetime
-
+import shutil
 # Load environment variables from the .env file
 load_dotenv()
 
 # API Key loaded once globally
 api_key = os.getenv('OPENAI_API_KEY')
 
-class Experimental:
+class Experiment:
     def __init__(self, scene_id: str, max_iterations: int = 5):
         """
         Initialize the Experimental class with a Scene ID and set up the necessary components.
@@ -24,10 +24,10 @@ class Experimental:
             max_iterations (int): The maximum number of iterations allowed for the experiment (default is 5).
         """
         self.max_iterations = max_iterations
+
         self.simulator = Simulator(scene_id)  # Create the Simulator object
         self.scene = Scene(scene_id, self.simulator)  # Initialize Scene with the simulator
         self.agent = OpenAIAgent(api_key)  # Initialize AI agent with the API key
-        # Define the log file path for this scene
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         log_filename = f"experimentslog_{self.scene.scene_id}_{timestamp}.txt"
         self.log_file_path = os.path.join(os.getcwd(), log_filename)
@@ -40,13 +40,11 @@ class Experimental:
         self.tool_mapping = {
             "get_displacement": self.simulator.get_displacement,
             "compute_force": self.simulator.compute_force,
-            "get_acceleration": self.simulator.get_acceleration,
             "set_velocity": self.simulator.set_velocity,
             "apply_force": self.simulator.apply_force,
             "apply_torque": self.simulator.apply_torque,
             "get_velocity": self.simulator.get_velocity,
             "detect_collision": self.simulator.detect_collision,
-            "get_parameters": self.simulator.get_parameters,
             "move_object": self.simulator.move_object,
             "get_position": self.simulator.get_position,
             "get_torque": self.simulator.get_torque,
@@ -58,6 +56,14 @@ class Experimental:
             "answer": lambda answer: {"result": answer}
         }
 
+    def python_tool(self, code: str):
+        try:
+            # Using eval() to execute the Python code
+            result = eval(code)
+            return result
+        except Exception as e:
+            return f"Error executing code: {str(e)}"
+        
     def execute_tool_calls(self, tool_calls_json: str) -> List[Dict[str, Any]]:
         """
         Execute the provided tool calls, log the results, and return them.
@@ -303,9 +309,25 @@ class Experimental:
             for i, result in enumerate(results, 1):
                 f.write(f"  [{i}] {result}\n")
 
+            # Append Python tool status
+            f.write(f"\n--- Python Tool Status ---\n")
+            f.write(f"Python Tool Enabled: {self.enable_python_tool}\n")
+
             total_iterations = self.max_iterations if timeout_occurred else itr + 1  # Increment by 1 if answer is found, or not completed by max iterations
             f.write(f"\nTotal number of iterations: {total_iterations}\n")
         
+        # **NEW CODE: Move the log file to the proper directory after the experiment is complete**
+        # Prepare the result directory for storing the log file
+        scene_number = self.scene.scene_number
+        scene_float = self.scene.scene_float
+        result_dir = os.path.join(os.getcwd(), "TestResults", f"Scene{scene_number}", f"Scene{scene_float}")
+        if not os.path.exists(result_dir):
+            os.makedirs(result_dir)
+
+        # Move the log file into the corresponding directory
+        new_log_file_path = os.path.join(result_dir, f"experiment_log_scene_{scene_float}.txt")
+        shutil.move(self.log_file_path, new_log_file_path)
+
         # Return the results of the experiment, including whether the correct answer was found and other statistics
         experiment_results = {
             'correct': correct_answer_found,  # Whether the correct answer was found
@@ -318,7 +340,7 @@ class Experimental:
             'correct_answer': correct_answer_value  
 
 
-        }
+        } 
 
         return experiment_results  # Return the results of the experiment
     
