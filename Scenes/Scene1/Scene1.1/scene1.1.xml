@@ -2,7 +2,7 @@
     <option gravity="0 0 -9.81"/>
     <worldbody>
         <light diffuse="0.5 0.5 0.5" pos="0 0 3" dir="0 0 -1"/>
-
+        
         <!-- Inclined Plane (now a box rotated to act as ramp) -->
         <body name="object_4" pos="0 0 0">
             <!-- 30-degree tilt around y-axis -->
@@ -20,10 +20,22 @@
             <joint name="object_1_joint" type="free"/>
         </body>
 
-        <!-- Hollow Sphere (blue) with higher inertia -->
+        <!-- Hollow Sphere (blue) -->
         <body name="object_2" pos="-2.0 0 1">
-            <geom type="sphere" size="0.3" mass="1.0" rgba="0 0 1 1" inertia="0.12 0.12 0.12"/>
+            <geom type="sphere" size="0.3" mass="1.0" rgba="0 0 1 1"/>
             <joint name="object_2_joint" type="free"/>
+            <!-- Remove the 'inertia' element entirely -->
         </body>
     </worldbody>
 </mujoco>
+
+
+
+
+
+
+
+
+
+
+

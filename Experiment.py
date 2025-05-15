@@ -4,7 +4,7 @@ import logging
 from dotenv import load_dotenv
 from Simulator import Simulator
 from Scene import Scene
-from AgentClass import OpenAIAgent
+from OpenAIAgent import OpenAIAgent
 from typing import Any, Dict, List
 from datetime import datetime
 import shutil

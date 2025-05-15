@@ -5,32 +5,69 @@ import Simulator
 import xml.etree.ElementTree as ET
 
 class Scene:
-    def __init__(self, scene_id: str):
-        self.scene_float = float(scene_id.split("_")[1])
-        self.scene_number = int(self.scene_float)
-        script_dir = os.path.dirname(os.path.abspath(__file__))  # e.g., .../Algoverse-updated-pipeline
+    def __init__(self, scene_id: str, simulator: Simulator):
+        self.scene_float = float(scene_id.split("_")[1])  # Extracts the floating part of the scene_id
+        self.scene_number = int(self.scene_float)  # Converts it to an integer
+        self.simulator = simulator  # Store the simulator instance for later use
+        script_dir = os.path.dirname(os.path.abspath(__file__))  # Get the directory of the current script
         base_dir = os.path.join(script_dir, "Scenes", f"Scene{self.scene_number}")
-        if self.scene_number > 200: # This runs the toy scenes (the scenes that test the simulator functions to see if they work)
-            self.scene_data = os.path.join(base_dir,f"scene{self.scene_number}.json")
-            self.scene_xml = os.path.join(base_dir, f"scene{self.scene_number}.xml")
-        else: #This is for the rest of the scenes (the ones that are used for the actual experiments)
+        # Construct file path for the JSON scene data file
+        if self.scene_number > 200:  # Runs for toy scenes
+            self.scene_data = os.path.join(base_dir, f"scene{self.scene_number}.json")
+        else:  # Runs for other scenes
             self.scene_data = os.path.join(base_dir, f"Scene{self.scene_float}", f"scene{self.scene_float}.json")
-            self.scene_xml = os.path.join(base_dir, f"Scene{self.scene_float}", f"scene{self.scene_float}.xml")
-
-        with open(self.scene_data, 'r') as file:
-            scene_data = json.load(file)
-            
+        try:
+            # Open and load the JSON file
+            with open(self.scene_data, 'r') as file:
+                scene_data = json.load(file)  # Load the JSON data into a dictionary
+                print(scene_data)  # Debugging step: print the loaded JSON data
+        except json.JSONDecodeError as e:
+            print(f"Error decoding JSON: {e}")
+            self.scene_data = None
+            return  # Early return to avoid further processing if JSON is invalid
+        except FileNotFoundError as e:
+            print(f"FileNotFoundError: {e}")
+            self.scene_data = None
+            return
+        except Exception as e:
+            print(f"Unexpected error: {e}")
+            self.scene_data = None
+            return
+        # Extract metadata and objects from the JSON data
         self.scene_desc = scene_data["metadata"]["scene_name"]
         self.scene_task = scene_data["metadata"]["task"]
         self.problem_type = scene_data["metadata"]["problem_type"]
         self.objects = scene_data["objects"]
         self.object_permissions = scene_data["object_permissions"]
-        
+        # Construct file path for the XML scene data file (set self.scene_xml)
+        if self.scene_number > 200:  # Runs for toy scenes
+            self.scene_xml = os.path.join(base_dir, f"scene{self.scene_number}.xml")
+        else:  # Runs for other scenes
+            self.scene_xml = os.path.join(base_dir, f"Scene{self.scene_float}", f"scene{self.scene_float}.xml")
         # Parse the XML to get initial positions and sizes for objects
-        self.xml_data = ET.fromstring(self.scene_xml)
-        self.initial_positions = self.get_initial_positions_from_xml()
-        self.sizes = self.get_sizes_from_xml()
-        self.quaternions = self.get_quaternions_from_xml()
+        try:
+            if not os.path.exists(self.scene_xml):
+                raise FileNotFoundError(f"XML file not found: {self.scene_xml}")
+            # Open and load the XML file
+            with open(self.scene_xml, 'r', encoding='utf-8') as file:
+                scene_xml_data = file.read()
+                self.xml_data = ET.fromstring(scene_xml_data)  # Parse the XML data
+        except ET.ParseError as e:
+            print(f"XML ParseError: {e}")
+            self.xml_data = None
+        except FileNotFoundError as e:
+            print(f"FileNotFoundError: {e}")
+            self.xml_data = None
+        except Exception as e:
+            print(f"Unexpected error while parsing XML: {e}")
+            self.xml_data = None
+        # If XML data is successfully loaded, extract relevant information
+        if self.xml_data:
+            self.initial_positions = self.get_initial_positions_from_xml()
+            self.sizes = self.get_sizes_from_xml()
+            self.quaternions = self.get_quaternions_from_xml()
+        else:
+            print("Error: XML data is unavailable.")
 
     def get_initial_positions_from_xml(self):
         positions = {}

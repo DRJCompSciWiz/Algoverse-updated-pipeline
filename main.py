@@ -31,7 +31,7 @@ import os
 import json
 import logging
 # Assuming all files are in the same directory and correctly implemented
-from AgentClass import OpenAIAgent, PerplexityAgent, GrokAgent, LlamaAgent, GeminiAgent, AnthropicAgent
+from OpenAIAgent import OpenAIAgent, PerplexityAgent, GrokAgent, LlamaAgent, GeminiAgent, AnthropicAgent
 from Scene import Scene
 from Simulator import Simulator
 from Experiment import Experiment
@@ -87,7 +87,7 @@ def main():
         print("❌ Python tool disabled")
 
     # Predefined list of scene IDs to iterate through
-    scene_ids = ["Scene_101"]  # Replace with actual scene IDs
+    scene_ids = ["Scene101"]  # Replace with actual scene IDs
 
     # Set the agent type (You can modify this to initialize different agents)
     agent_type = "OpenAIAgent"  # Example: you can change this dynamically to switch agents
@@ -104,7 +104,9 @@ def main():
         os.makedirs(base_dir)
     
     for scene_id in scene_ids:
-        scene = Scene(scene_id)  # Initialize the scene
+        simulator = Simulator(scene_id)
+        scene = Scene(scene_id, simulator)
+
         
         # Generate scene prompt and print to the terminal
         prompt = scene.generate_prompt()

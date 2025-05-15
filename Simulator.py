@@ -44,23 +44,27 @@ class Simulator:
 
     def get_model_path(self, scene_id: str) -> str:
         """Generate the model path based on the scene_id (returns a string)"""
-        try:
-            # Get the directory of the current script
-            script_dir = os.path.dirname(os.path.abspath(__file__))
-            scenes_dir = os.path.join(script_dir, "Scenes")
-            
-            # Extract scene number and construct XML path
-            scene_number = scene_id.split("_")[-1]
-            xml_path = os.path.join(scenes_dir, f"Scene{scene_number}", f"scene{scene_number}.xml")
-            
-            # Verify if the file exists
-            if not os.path.exists(xml_path):
-                raise FileNotFoundError(f"Scene XML not found at: {xml_path}")
-            
-            return xml_path.replace("\\", "/")
-        except Exception as e:
-            logging.error(f"Path construction failed: {e}")
-            raise
+    try:
+        # Get the directory of the current script
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        scenes_dir = os.path.join(script_dir, "Scenes")
+    
+        # Extract scene number and construct XML path
+        scene_number = scene_id.split("_")[-1]  # Ensure this splits correctly
+        xml_path = os.path.join(scenes_dir, f"Scene{scene_number}", f"scene{scene_number}.xml")
+    
+        # Debugging log to verify the constructed path
+        logging.debug(f"Constructed model path: {xml_path}")
+    
+        # Verify if the file exists
+        if not os.path.exists(xml_path):
+            raise FileNotFoundError(f"Scene XML not found at: {xml_path}")
+    
+        return xml_path.replace("\\", "/")
+    except Exception as e:
+        logging.error(f"Path construction failed: {e}")
+        raise
+
         
     def render(self):
         """Render the current simulation frame (returns nothing specific)"""
