@@ -1,15 +1,32 @@
 {
-  "scene_name": "Unknown Mass on Spring Scale",
-  "task": "Determine which sphere is hollow based on their rolling behavior.",
-  "objects": [
-    {
-      "name": "Spring Scale",
-      "object_id": "1",
-      "permissions": { "spring_constant": false, "mass": false, "displacement": false }
+  "metadata": {
+    "scene_name": "Unknown Mass on Spring Scale",
+    "task": "Determine which sphere is hollow based on their rolling behavior.",
+    "problem_type": "computation"
+  },
+
+  "answer": "",
+
+  "expected_behavior": "The object's mass is calculated using F = kx, where k is the spring constant and x is displacement.",
+
+  "reasoning": "Using Hooke’s Law (F = kx), the force on the spring is proportional to displacement. Since the object’s weight equals this force (mg = kx), the mass can be computed from the measured displacement and known spring constant.",
+
+  "number_of_objects": "1",
+
+  "objects": {
+    "object_1": {
+      "name": "spring_scale",
+      "object_id": "1"
     }
-  ]
-  ".txt stuff": "The unknown mass is determined using Hooke’s Law: F = kx. Given the spring constant and displacement, the object’s weight (mg) is derived. testing_method: Use Hooke’s Law to calculate mass from displacement., expected_behavior: The object's mass is calculated using F = kx, where k is the spring constant and x is displacement.",
+  },
+
+  "object_permissions": {
+    "object_1_permissions": {
+      "spring_constant": false,
+      "mass": false,
+      "displacement": false,
+      "name": true,
+      "pos": true
+    }
+  }
 }
-
-
-

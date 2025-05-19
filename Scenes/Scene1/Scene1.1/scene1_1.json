@@ -1,0 +1,58 @@
+{
+  "metadata": {
+    "scene_name": "Solid vs Hollow Sphere",
+    "task": "Two spheres are positioned near an inclined ramp. Determine which sphere is hollow based on how they roll down the ramp.",
+    "problem_type": "comparison"
+  },
+
+  "answer": "2",
+
+  "expected_behavior": "The LLM changes the positions of the centers of the spheres to roll down the ramp and observes which object rolls more slowly.",
+  
+  "reasoning": "The hollow sphere rolls down slower due to its greater moment of inertia, so the object that reaches the bottom last is the hollow one — object 2.",
+
+  "number_of_objects": "4",
+
+  "objects": {
+    "object_1": { "name": "solid_sphere", "object_id": "1" },
+    "object_2": { "name": "hollow_sphere", "object_id": "2" },
+    "object_3": { "name": "ground_plane", "object_id": "3" },
+    "object_4": { "name": "incline_ramp", "object_id": "4" }
+  },
+
+  "object_permissions": {
+    "object_1_permissions": {
+      "type": true,
+      "density": false,
+      "mass": false,
+      "radius": false,
+      "name": true,
+      "pos": true
+    },
+    "object_2_permissions": {
+      "type": true,
+      "density": false,
+      "mass": false,
+      "radius": false,
+      "name": true,
+      "pos": true
+    },
+    "object_3_permissions": {
+      "type": true,
+      "density": true,
+      "mass": true,
+      "size": true,
+      "name": true,
+      "pos": true
+    },
+    "object_4_permissions": {
+      "type": true,
+      "density": true,
+      "mass": true,
+      "size": true,
+      "name": true,
+      "pos": true,
+      "quat": true
+    }
+  }
+}

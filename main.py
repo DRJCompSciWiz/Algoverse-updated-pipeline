@@ -87,7 +87,7 @@ def main():
         print("❌ Python tool disabled")
 
     # Predefined list of scene IDs to iterate through
-    scene_ids = ["Scene101"]  # Replace with actual scene IDs
+    scene_ids = ["Scene_1.1"]  # Replace with actual scene IDs
 
     # Set the agent type (You can modify this to initialize different agents)
     agent_type = "OpenAIAgent"  # Example: you can change this dynamically to switch agents
@@ -117,7 +117,7 @@ def main():
         print(f"Python tool {'enabled' if enable_python_tool else 'disabled'}")
         
         # Initialize Experiment object with Python tool randomization
-        experiment = Experiment(scene_id, max_iterations=5, enable_python_tool=enable_python_tool)
+        experiment = Experiment(scene_id, max_iterations=11, enable_python_tool=enable_python_tool)
         
         # Run the experiment
         results = experiment.run_experiment()

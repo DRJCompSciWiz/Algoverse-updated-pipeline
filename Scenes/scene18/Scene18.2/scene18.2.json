@@ -1,0 +1,58 @@
+{
+    "metadata": {
+      "scene_name": "Elastic vs Inelastic with Mass Variation",
+      "task": "Determine which sphere rebounds higher after colliding with the barrier.",
+      "problem_type": "comparison"
+    },
+    "answer": "1",
+    "expected_behavior": "The LLM observes that the elastic collision (object_1) causes the sphere to rebound higher than the inelastic one.",
+    "reasoning": "Despite different densities, the elastic sphere will still bounce more due to energy conservation.",
+    "number_of_objects": "4",
+    "objects": {
+      "object_1": { "name": "sphere_elastic", "object_id": "1" },
+      "object_2": { "name": "sphere_inelastic", "object_id": "2" },
+      "object_3": { "name": "barrier", "object_id": "3" },
+      "object_4": { "name": "surface", "object_id": "4" }
+    },
+    "object_permissions": {
+      "object_1_permissions": { "type": true, "density": true, "mass": true, "radius": true, "name": true, "pos": true, "quat": true, "friction": true, "solref": true, "inertia": true, "axis": true, "range": true, "joint": true, "gear": true, "site": true, "texture": true },
+      "object_2_permissions": { "type": true, "density": true, "mass": true, "radius": true, "name": true, "pos": true, "quat": true, "friction": true, "solref": true, "inertia": true, "axis": true, "range": true, "joint": true, "gear": true, "site": true, "texture": true },
+      "object_3_permissions": { "type": true, "density": true, "mass": true, "size": true, "name": true, "pos": true, "quat": true, "friction": true, "solref": true, "inertia": true, "axis": true, "range": true, "joint": true, "gear": true, "site": true, "texture": true },
+      "object_4_permissions": { "type": true, "density": true, "mass": true, "size": true, "name": true, "pos": true, "quat": true, "friction": true, "solref": true, "inertia": true, "axis": true, "range": true, "joint": true, "gear": true, "site": true, "texture": true }
+    },
+    "gravity": [0, 0, -9.81],
+    "objects_data": {
+      "barrier": {
+        "type": "box",
+        "position": [0, 0, 0],
+        "size": [0.5, 2, 1],
+        "rgba": [0.4, 0.4, 0.4, 1],
+        "friction": [0.6, 0.6, 0.6]
+      },
+      "surface": {
+        "type": "plane",
+        "position": [-10, 0, -10],
+        "size": [30, 30, 0.1],
+        "rgba": [0.8, 0.8, 0.8, 1],
+        "friction": [1, 1, 1]
+      },
+      "sphere_elastic": {
+        "type": "sphere",
+        "position": [-5, 0, 1],
+        "size": 0.5,
+        "density": 5,
+        "rgba": [0, 1, 1, 1],
+        "joint_type": "free"
+      },
+      "sphere_inelastic": {
+        "type": "sphere",
+        "position": [5, 0, 1],
+        "size": 0.5,
+        "density": 0.5,
+        "rgba": [1, 0, 1, 1],
+        "joint_type": "free"
+      }
+    }
+  }
+  
+  

@@ -1,7 +1,7 @@
 import openai
 
 # Set your OpenAI API key
-openai.api_key = "your-api-key-here" #Do not set it on the github repository
+openai.api_key = "OPENAI_API_KEY" #Do not set it on the github repository
 
 #mdoel can be changed
 # potential models (check pricing and stuff) text-davinci-003", "text-curie-001", "text-babbage-001", "text-ada-001", "gpt-4", "gpt-4-0314", "gpt-4-0613

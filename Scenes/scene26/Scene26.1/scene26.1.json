@@ -1,0 +1,21 @@
+{
+  "metadata": {
+    "scene_name": "Inclined Plane Angle Variation - Variation 1",
+    "task": "Determine how the acceleration of a block changes as the inclined plane's angle increases.",
+    "problem_type": "conceptual"
+  },
+  "answer": "increases",
+  "expected_behavior": "As the incline angle increases, the block accelerates faster.",
+  "reasoning": "The acceleration on an incline is proportional to g*sin(theta), which increases as the angle increases.",
+  "number_of_objects": 3,
+  "objects": {
+    "object_1": { "name": "block", "object_id": "object_1" },
+    "object_2": { "name": "inclined_plane", "object_id": "object_2" },
+    "object_3": { "name": "surface", "object_id": "object_3" }
+  },
+  "object_permissions": {
+    "object_1_permissions": { "friction": true },
+    "object_2_permissions": { "quat": true },
+    "object_3_permissions": { "friction": true }
+  }
+}

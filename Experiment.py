@@ -15,28 +15,32 @@ load_dotenv()
 api_key = os.getenv('OPENAI_API_KEY')
 
 class Experiment:
-    def __init__(self, scene_id: str, max_iterations: int = 5):
+    def __init__(self, scene_id: str, max_iterations: int = 8, enable_python_tool: bool = False):
         """
         Initialize the Experimental class with a Scene ID and set up the necessary components.
-        
+
         Args:
             scene_id (str): The unique identifier for the simulation scene.
             max_iterations (int): The maximum number of iterations allowed for the experiment (default is 5).
+            enable_python_tool (bool): Whether to enable the Python evaluation tool (default False).
         """
+        self.scene_id = scene_id  # Store the scene_id string
         self.max_iterations = max_iterations
+        self.enable_python_tool = enable_python_tool  # Store the flag
 
         self.simulator = Simulator(scene_id)  # Create the Simulator object
         self.scene = Scene(scene_id, self.simulator)  # Initialize Scene with the simulator
         self.agent = OpenAIAgent(api_key)  # Initialize AI agent with the API key
+
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        log_filename = f"experimentslog_{self.scene.scene_id}_{timestamp}.txt"
+        log_filename = f"experimentslog_{self.scene_id}_{timestamp}.txt"  # Use self.scene_id, not self.scene.scene_id
         self.log_file_path = os.path.join(os.getcwd(), log_filename)
 
         # Create or clear the file at the beginning of the run
         with open(self.log_file_path, "w") as f:
-            f.write(f"=== Experiment Log for {self.scene.scene_id} ===\n\n")
+            f.write(f"=== Experiment Log for {self.scene_id} ===\n\n")
 
-        # Tool mapping to bind methods from the simulator to be called dynamically
+        # Tool mapping...
         self.tool_mapping = {
             "get_displacement": self.simulator.get_displacement,
             "compute_force": self.simulator.compute_force,
@@ -47,6 +51,8 @@ class Experiment:
             "detect_collision": self.simulator.detect_collision,
             "move_object": self.simulator.move_object,
             "get_position": self.simulator.get_position,
+            "list_objects": self.simulator.list_objects,
+            "get_parameters": self.simulator.get_parameters,
             "get_torque": self.simulator.get_torque,
             "get_center_of_mass": self.simulator.get_center_of_mass,
             "get_angular_momentum": self.simulator.get_angular_momentum,
@@ -55,6 +61,8 @@ class Experiment:
             "step": self.simulator.step,
             "answer": lambda answer: {"result": answer}
         }
+
+
 
     def python_tool(self, code: str):
         try:
@@ -196,17 +204,11 @@ class Experiment:
                 tool_calls_json_obj = json.loads(tool_calls_json_str)
                 tool_history.append(tool_calls_json_str)
             except ValueError as e:
-                # Construct the error message listing the tools that caused invalid JSON
-                error_msg = f"Error: Invalid JSON syntax for tool(s). Please try again with proper syntax."
-                
-                # Update the LLM input prompt with the error message
+                error_msg = "Error: Invalid JSON syntax for tool(s). Please try again with proper syntax."
                 llm_input_prompt = (f"Previous results: {error_msg}\n"
                                     f"IMPORTANT: You have {remaining} iterations remaining to use the 'answer' tool.\n"
                                     f"What should I do next?")
-
-                # Increment iteration number and proceed to the next iteration
-                itr += 1  # Move to the next iteration after an invalid JSON error
-                continue  # Proceed to the next iteration of the loop
+                continue  # retry same iteration
 
             logging.info(f"\n=== Executing Tool Calls (Iteration {itr + 1}) ===")
 

@@ -1,0 +1,38 @@
+<mujoco model="22.1">
+  <!-- Set gravity -->
+  <option gravity="0 0 -9.81"/>
+
+  <!-- Worldbody contains all bodies -->
+  <worldbody>
+
+    <!-- Ramp Body -->
+    <body name="ramp" pos="0 0 0">
+      <!-- Ramp geometry -->
+      <geom type="plane" size="5 10 0.1" rgba="0.6 0.6 0.6 1" friction="0.001 0.001 0" quat="0.5 0.86 0 0"/>
+    </body>
+
+    <!-- Surface Body -->
+    <body name="surface" pos="-10 0 -10">
+      <!-- Surface geometry -->
+      <geom type="plane" size="30 30 0.1" rgba="0.8 0.8 0.8 1" friction="1 1 1"/>
+    </body>
+
+    <!-- Pendulum Body -->
+    <body name="pendulum" pos="-5 0 2">
+      <!-- Corrected pendulum geometry (capsule) without fromto -->
+      <!-- Capsule from (0, 0, 0) to (0, 0, -1.5) → pos at center and length = 1.5 -->
+      <geom type="capsule" pos="0 0 -0.75" size="0.05 0.75" rgba="0.1 0.6 0.9 1" />
+      <!-- Pendulum joint (hinge) -->
+      <joint name="pendulum_joint" type="hinge" axis="0 1 0"/>
+    </body>
+
+    <!-- Block Body -->
+    <body name="block" pos="5 0 1">
+      <!-- Block geometry (box) -->
+      <geom type="box" size="0.5 0.5 0.5" density="1.1" rgba="0.9 0.5 0.3 1" friction="0.001 0.001 0"/>
+      <!-- Block joint (free) -->
+      <joint name="block_joint" type="free"/>
+    </body>
+
+  </worldbody>
+</mujoco>

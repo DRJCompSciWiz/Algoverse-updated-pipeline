@@ -6,52 +6,55 @@ import xml.etree.ElementTree as ET
 
 class Scene:
     def __init__(self, scene_id: str, simulator: Simulator):
-        self.scene_float = float(scene_id.split("_")[1])  # Extracts the floating part of the scene_id
-        self.scene_number = int(self.scene_float)  # Converts it to an integer
-        self.simulator = simulator  # Store the simulator instance for later use
-        script_dir = os.path.dirname(os.path.abspath(__file__))  # Get the directory of the current script
+        self.scene_float = float(scene_id.split("_")[1])  # Extract float part of scene_id
+        self.scene_number = int(self.scene_float)
+        self.simulator = simulator
+
+        script_dir = os.path.dirname(os.path.abspath(__file__))
         base_dir = os.path.join(script_dir, "Scenes", f"Scene{self.scene_number}")
-        # Construct file path for the JSON scene data file
-        if self.scene_number > 200:  # Runs for toy scenes
-            self.scene_data = os.path.join(base_dir, f"scene{self.scene_number}.json")
-        else:  # Runs for other scenes
-            self.scene_data = os.path.join(base_dir, f"Scene{self.scene_float}", f"scene{self.scene_float}.json")
+
+        if self.scene_number > 200:
+            self.scene_data_path = os.path.join(base_dir, f"scene{self.scene_number}.json")
+        else:
+            self.scene_data_path = os.path.join(base_dir, f"Scene{self.scene_float}", f"scene{self.scene_float}.json")
+
         try:
-            # Open and load the JSON file
-            with open(self.scene_data, 'r') as file:
-                scene_data = json.load(file)  # Load the JSON data into a dictionary
-                print(scene_data)  # Debugging step: print the loaded JSON data
+            with open(self.scene_data_path, 'r') as file:
+                self.data = json.load(file)  # <-- assign to self.data, not local variable!
+                print(self.data)  # Debug print
         except json.JSONDecodeError as e:
             print(f"Error decoding JSON: {e}")
-            self.scene_data = None
-            return  # Early return to avoid further processing if JSON is invalid
+            self.data = None
+            return
         except FileNotFoundError as e:
             print(f"FileNotFoundError: {e}")
-            self.scene_data = None
+            self.data = None
             return
         except Exception as e:
             print(f"Unexpected error: {e}")
-            self.scene_data = None
+            self.data = None
             return
-        # Extract metadata and objects from the JSON data
-        self.scene_desc = scene_data["metadata"]["scene_name"]
-        self.scene_task = scene_data["metadata"]["task"]
-        self.problem_type = scene_data["metadata"]["problem_type"]
-        self.objects = scene_data["objects"]
-        self.object_permissions = scene_data["object_permissions"]
-        # Construct file path for the XML scene data file (set self.scene_xml)
-        if self.scene_number > 200:  # Runs for toy scenes
+
+        # Extract metadata and objects from self.data
+        self.scene_desc = self.data["metadata"]["scene_name"]
+        self.scene_task = self.data["metadata"]["task"]
+        self.problem_type = self.data["metadata"]["problem_type"]
+        self.objects = self.data.get("objects", {})
+        self.object_permissions = self.data.get("object_permissions", {})
+
+        # Construct XML path similarly
+        if self.scene_number > 200:
             self.scene_xml = os.path.join(base_dir, f"scene{self.scene_number}.xml")
-        else:  # Runs for other scenes
+        else:
             self.scene_xml = os.path.join(base_dir, f"Scene{self.scene_float}", f"scene{self.scene_float}.xml")
-        # Parse the XML to get initial positions and sizes for objects
+
+        # Parse XML
         try:
             if not os.path.exists(self.scene_xml):
                 raise FileNotFoundError(f"XML file not found: {self.scene_xml}")
-            # Open and load the XML file
             with open(self.scene_xml, 'r', encoding='utf-8') as file:
                 scene_xml_data = file.read()
-                self.xml_data = ET.fromstring(scene_xml_data)  # Parse the XML data
+                self.xml_data = ET.fromstring(scene_xml_data)
         except ET.ParseError as e:
             print(f"XML ParseError: {e}")
             self.xml_data = None
@@ -61,13 +64,14 @@ class Scene:
         except Exception as e:
             print(f"Unexpected error while parsing XML: {e}")
             self.xml_data = None
-        # If XML data is successfully loaded, extract relevant information
+
         if self.xml_data:
             self.initial_positions = self.get_initial_positions_from_xml()
             self.sizes = self.get_sizes_from_xml()
             self.quaternions = self.get_quaternions_from_xml()
         else:
             print("Error: XML data is unavailable.")
+
 
     def get_initial_positions_from_xml(self):
         positions = {}
@@ -222,10 +226,20 @@ class Scene:
         """
         Generates a dynamic prompt using all parts of the JSON file, as well as the tool mapping.
         """
+        # Object name to object ID mapping (mapping names to correct object IDs)
+        object_name_to_id = {
+            "solid_cylinder": "object_1",  # Correct object ID for solid cylinder
+            "ring": "object_2"             # Correct object ID for ring
+        }
+
         objects_str = ""
         for obj_id, obj_data in self.objects.items():
             obj_name = obj_data["name"]
-            permissions = obj_data["permissions"]
+            
+            # Get the correct object ID from the mapping
+            object_id = object_name_to_id.get(obj_name, obj_name)  # Default to obj_name if not found in the mapping
+            
+            permissions = self.data.get("object_permissions", {}).get(f"{obj_id}_permissions", {})
 
             # Check permissions and extract data if accessible
             init_pos = self.get_initial_positions_from_xml() if "pos" in permissions else "n/a"
@@ -250,29 +264,33 @@ class Scene:
         objects_str += "\nQuaternion: A quaternion is used to represent rotation in 3D space. The four numbers represent rotations along the X, Y, Z axes and a scalar component.\n"
 
         # Add the note about 'n/a' attributes
-        objects_str += "\nIf an attribute has 'n/a' right beside it, that means you CANNOT access that attributes value, so keep that in mind when running through the experiment.\n"
+        objects_str += "\nIf an attribute has 'n/a' right beside it, that means you CANNOT access that attribute's value, so keep that in mind when running through the experiment.\n"
 
-        # Define the tool mapping string (as a literal string)
+        # Define the tool mapping string, including get_parameters and other tools
         tools = [
-            {"name": "step", "description": "keeps on moving the simulator forward in time", "arguments": {"duration": "float"}, "return type": {"results" : None}},
-            {"name": "apply_force", "description": "applies a force vector to an object", "arguments": {"object_id": "str", "force_vector": "list[float]"}, "return type": {"status": "str", "object_id": "int", "force": "list[float]"}},
-            {"name": "get_velocity", "description": "retrieves the velocity vector of an object", "arguments": {"object_id": "str"}, "return type": {"velocity": "array"}},
-            {"name": "detect_collision", "description": "checks if two objects have collided", "arguments": {"obj1_id": "str", "obj2_id": "str"}, "return type": {"collision_detected": "bool"}},
-            {"name": "get_parameters", "description": "fetches physical parameters like mass, bounding box, and type", "arguments": {"object_id": "str // REMEMBER THAT YOU WRITE IT AS AN F-STRING THAT IS object_(object id), where object id is an integer"}, "return type": {"mass": "float", "bounding_box": "list[float]", "type": "int"}},
-            {"name": "move_object", "description": "sets an object's position to a new coordinate", "arguments": {"object_id": "str", "x": "float", "y": "float", "z": "float"}, "return type": {"position": "tuple[float, float, float]"}},
-            {"name": "get_position", "description": "gets the current position and time of an object", "arguments": {"object_id": "str"}, "return type": {"position": "tuple[float, float, float]", "time": "float"}},
-            {"name": "get_displacement", "description": "gets how far an object has moved from its initial position", "arguments": {"object_id": "str"}, "return type": {"displacement": "float"}},
-            {"name": "compute_force", "description": "calculates the force on an object using F = ma", "arguments": {"object_id": "str", "mass": "float"}, "return type": {"x": "float", "y": "float", "z": "float"}},
-            {"name": "get_acceleration", "description": "returns the current acceleration vector of an object", "arguments": {"object_id": "str"}, "return type": {"x": "float", "y": "float", "z": "float"}},
-            {"name": "set_velocity", "description": "sets the velocity vector of an object", "arguments": {"object_id": "str", "velocity_vector": "list[float]"}, "return type": {"status": "str", "object_id": "int", "velocity": "list[float]"}},
-            {"name": "apply_torque", "description": "applies a torque to an object", "arguments": {"object_id": "str", "torque_vector": "list[float]"}, "return type": {"status": "str", "object_id": "int", "torque": "list[float]"}},
-            {"name": "get_torque", "description": "returns the torque acting on an object", "arguments": {"object_id": "str"}, "return type": {"torque": {"x": "float", "y": "float", "z": "float"}}},
-            {"name": "get_center_of_mass", "description": "gets the center of mass of the entire scene", "arguments": {}, "return type": {"center_of_mass": {"x": "float", "y": "float", "z": "float"}}},
-            {"name": "get_angular_momentum", "description": "returns the angular momentum of an object", "arguments": {"object_id": "str", "mass": "float"}, "return type": {"angular_momentum": {"x": "float", "y": "float", "z": "float"}}},
-            {"name": "change_position", "description": "translates an object by some delta in the local or world frame", "arguments": {"object_id": "str", "dx": "float", "dy": "float", "dz": "float", "in_world_frame": "bool"}, "return type": {"new_position": {"x": "float", "y": "float", "z": "float"}}},
-            {"name": "quat_to_rot_matrix", "description": "converts a quaternion into a 3x3 rotation matrix", "arguments": {"q": "list[float]"}, "return type": {"rotation_matrix": "array[3][3]"}},
-            {"name": "answer", "description": "submits an answer back to the system for checking or logging", "arguments": {"answer": "str or float"}, "return type": {"acknowledged": "bool"}}
+            {"name": "step", "description": "Advances the simulation forward in time by the specified duration.", "arguments": {"duration": "float"}, "return type": {"status": "str"}},
+            {"name": "apply_torque", "description": "Applies a torque to an object", "arguments": {"object_id": "str", "torque_vector": "list[float]"}, "return type": {"status": "str", "object_id": "int", "torque": "list[float]"}},
+            {"name": "get_velocity", "description": "Retrieves the velocity vector of an object", "arguments": {"object_id": "str"}, "return type": {"velocity": "array"}},
+            {"name": "get_parameters", "description": "Fetches physical parameters like mass, bounding box, and type of an object. The 'object_id' parameter can be named like object_1.", "arguments": {"object_id": "str"}, "return type": {"mass": "float", "bounding_box": "list[float]", "type": "int"}},
+            {"name": "move_object", "description": "Sets an object's position to a new coordinate", "arguments": {"object_id": "str", "x": "float", "y": "float", "z": "float"}, "return type": {"position": "tuple[float, float, float]"}},
+            {"name": "get_position", "description": "Gets the current position and time of an object", "arguments": {"object_id": "str"}, "return type": {"position": "tuple[float, float, float]", "time": "float"}},
+            {"name": "get_displacement", "description": "Gets how far an object has moved from its initial position", "arguments": {"object_id": "str"}, "return type": {"displacement": "float"}},
+            {"name": "compute_force", "description": "Calculates the force on an object using F = ma", "arguments": {"object_id": "str", "mass": "float"}, "return type": {"x": "float", "y": "float", "z": "float"}},
+            {"name": "set_velocity", "description": "Sets the velocity vector of an object", "arguments": {"object_id": "str", "velocity_vector": "list[float]"}, "return type": {"status": "str", "object_id": "int", "velocity": "list[float]"}},
+            {"name": "list_objects", "description": "Lists all body names currently in the simulation so the LLM can identify valid object IDs.", "arguments": {}, "return type": {"body_names": "list[str]"}},
+            {"name": "apply_force", "description": "Applies a force vector to an object", "arguments": {"object_id": "str", "force_vector": "list[float]"}, "return type": {"status": "str", "object_id": "int", "force": "list[float]"}},
+            {"name": "get_torque", "description": "Returns the torque acting on an object", "arguments": {"object_id": "str"}, "return type": {"torque": {"x": "float", "y": "float", "z": "float"}}},
+            {"name": "get_center_of_mass", "description": "Gets the center of mass of the entire scene", "arguments": {}, "return type": {"center_of_mass": {"x": "float", "y": "float", "z": "float"}}},
+            {"name": "get_angular_momentum", "description": "Returns the angular momentum of an object", "arguments": {"object_id": "str", "mass": "float"}, "return type": {"angular_momentum": {"x": "float", "y": "float", "z": "float"}}},
+            {"name": "change_position", "description": "Translates an object by some delta in the local or world frame", "arguments": {"object_id": "str", "dx": "float", "dy": "float", "dz": "float", "in_world_frame": "bool"}, "return type": {"new_position": {"x": "float", "y": "float", "z": "float"}}},
+            {"name": "quat_to_rot_matrix", "description": "Converts a quaternion into a 3x3 rotation matrix", "arguments": {"q": "list[float]"}, "return type": {"rotation_matrix": "array[3][3]"}},
+            
+            # NEW tool added here
+            {"name": "list_objects", "description": "Lists all body names currently in the simulation so the LLM can identify valid object IDs.", "arguments": {}, "return type": {"body_names": "list[str]"}},
+
+            {"name": "answer", "description": "Submits an answer back to the system for checking or logging", "arguments": {"answer": "str or float"}, "return type": {"acknowledged": "bool"}}
         ]
+
 
         tools_str = json.dumps(tools, indent=2)
         
@@ -300,7 +318,6 @@ class Scene:
             f"\n<environment>\nResults: [{{\"tool\": \"get_velocity\", \"parameters\": {{...}}, \"result\": {{\"velocity\": [0, -4.9, 0]}}, \"sim_time\": 0.5}}] What will you do next\n"
             f"\n<assistant>\nNow I will call back the answer.\n```json\n"
             f'[{{"tool": "answer", "parameters": {{"answer": "-4.9"}}}}]\n```\n<END EXAMPLE>\n"'
-            
         )
 
         # Append additional instructions based on problem type
@@ -325,15 +342,23 @@ class Scene:
             f"\nYou must call `step` to simulate time progression.\n"
             f'\nDo not make any assumptions about the positions or states of objects, if you are unsure you can use tools get this information.\n'
             f'\nThe z plane is the vertical plane, and the x and y planes are the horizontal planes.\n'
-            f'\nUnderstand that you can use the tools to gather necessary information pertainig to all objects in the scene, not just the one you are trying to analyze.\n'
+            f'\nUnderstand that you can use the tools to gather necessary information pertaining to all objects in the scene, not just the one you are trying to analyze.\n'
             f'\nIf your json format is incorrect - the environment will tell you and the simulator will remain in the same state. If one of your tool calls has incorrect formatting, the previous tool calls will successfully execute but the incorrect tool and subsequent tools will not execute. You will see how your tool call was incorrect and get a chance to retry in the next iteration.\n'
             f'\nRemember that YOU MUST PROVIDE YOUR REASONING FOR EVERY ACTION you take, and then make sure to add a valid JSON format of an array of tool calls.\n'
         )
+
         self.prompt += (
-            f'\n***When you are trying to call functions, use a string that goes as object_{{object_id}} for the object id, and use the name of the function as the tool name.***\n'
-        )
+            "\n\n***Important Instruction for Object IDs***\n"
+            "Before using any tool that requires an 'object_id', you must first call the 'list_objects' tool "
+            "to retrieve the current valid body names present in the simulation. "
+            "Use one of those returned names as the 'object_id' for subsequent calls like 'move_object' or 'get_velocity'.\n"
+)
 
         return self.prompt
+
+
+
+
 
     def get_correct_answer(self):
         """Returns the correct answer for the scene."""

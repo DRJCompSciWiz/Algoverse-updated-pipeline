@@ -1,0 +1,18 @@
+{
+    "correct": false,
+    "timeout": false,
+    "num_tool_calls": 10,
+    "iterations": 7,
+    "answer_found": true,
+    "tool_usage": {
+        "reset_sim": 1,
+        "list_objects": 1,
+        "get_position": 2,
+        "step": 1,
+        "get_velocity": 2,
+        "get_displacement": 2,
+        "answer": 1
+    },
+    "llm_answer": "object_2",
+    "correct_answer": "2"
+}

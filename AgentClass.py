@@ -83,41 +83,15 @@ Submit your answer only when confident, using the answer function."""):
 # print(agent.interact("What should I do in this MuJoCo environment?"))
 
 class OpenAIAgent:
-    def __init__(self, api_key, system_prompt="""You are an expert AI agent designed to solve physics problems by interacting directly with a physics simulator. Your task is to solve problems related to object collisions, friction, and movement. You have access to tools that allow you to manipulate objects, query object states (position, velocity, acceleration), and simulate physics progression through time (step).
-        
-        Here are some important guidelines for interacting with the environment:
-        
-        1) **Object Identification**: Always use the correct object ID format (e.g., `"object_1"`, `"object_2"`) when calling tools. DO NOT use object names (e.g., `"block1"`, `"block2"`). Object IDs are assigned to each object in the simulation and must be used correctly to interact with them.
-        
-        2) **Action Format**: Always provide actions formatted as **valid JSON arrays of tool calls**. Each tool call must use the correct parameters and object IDs.
-        
-        3) **Time Progression**: Simulate time progression explicitly using the `step` function. This is crucial for allowing collisions to happen and for analyzing the effects of friction.
-        
-        4) **Querying Object States**: Always query the object states (e.g., `get_velocity`, `get_position`) to understand the environment better. The simulation will not automatically provide the information.
-        
-        5) **Reasoning**: Provide clear reasoning for every action. Explain why you're setting specific velocities, applying forces, or simulating certain durations.
-        
-        6) **Answer Submission**: Submit your answer only when confident. The answer should be provided using the `answer` tool in a correct format.
-        
-        **Task-Specific Guidelines**:
-        - For tasks involving object collisions, always set the initial velocities of the objects to ensure they move towards each other.
-        - After simulating the collision, retrieve the velocities of the objects to assess the effects of friction and their moment of inertia.
-        - Make sure to apply appropriate forces or torques when necessary to ensure objects interact as expected.
-        
-        **Important Tools**:
-        - **set_velocity**: Set the velocity of an object.
-        - **apply_force**: Apply a force to an object to induce movement.
-        - **step**: Progress the simulation by a specified duration.
-        - **get_velocity**: Retrieve the velocity of an object after a simulation step.
-        - **get_position**: Retrieve the current position of an object.
-        
-        You will be provided with a physics simulation scene. Please make sure to:
-        - Set velocities or apply forces correctly.
-        - Use the correct object IDs for interaction.
-        - Simulate time progression and observe the collision results.
-        - After collision, analyze the changes in velocity to evaluate the effects of friction.
-        
-        Submit your final answer only when you're confident in the result. Remember to follow the above guidelines carefully."""):
+    def __init__(self, api_key, system_prompt= """You are an expert AI agent designed to solve physics problems by interacting directly with a physics simulator. You have access to a variety of tools to manipulate objects, query object states (position, velocity, acceleration, etc.), and simulate physics progression through time (step).
+    
+    Here are some important guidelines for interacting with the environment:
+    1) ALWAYS Provide clear reasoning for every action.
+    2) ALWAYS return actions formatted as valid JSON arrays of tool calls.
+    3) Simulate time progression explicitly using the step function.
+    4) Query the object states to give you better context of the environment, it will not automatically tell you this.
+                 
+    Submit your answer only when confident, using the answer function."""):
         
         """
         Initialize the OpenAIAgent.

@@ -1,0 +1,29 @@
+<mujoco>
+    <option gravity="0 0 -9.81"/>
+    <worldbody>
+        <light diffuse="0.5 0.5 0.5" pos="0 0 3" dir="0 0 -1"/>
+
+        <!-- Inclined Plane (now a box rotated to act as ramp) -->
+        <body name="object_4" pos="0 0 0">
+            <!-- 30-degree tilt around y-axis -->
+            <geom type="box" size="2 2 0.1" rgba="0.7 0 0 1" friction="1 1 1" quat="0.9659 0 0.2588 0"/>
+        </body>
+
+        <!-- Ground Plane -->
+        <body name="object_3" pos="0 0 -1">
+            <geom type="plane" size="30 30 0.1" rgba="0.7 0.7 0.7 1" friction="1 1 1"/>
+        </body>
+
+        <!-- Solid Sphere (red) -->
+        <body name="object_1" pos="-1.5 0 1">
+            <geom type="sphere" size="0.3" mass="1.0" rgba="1 0 0 1"/>
+            <joint name="object_1_joint" type="free"/>
+        </body>
+
+        <!-- Hollow Sphere (blue) with higher inertia -->
+        <body name="object_2" pos="-2.0 0 1">
+            <geom type="sphere" size="0.3" mass="1.0" rgba="0 0 1 1" inertia="0.12 0.12 0.12"/>
+            <joint name="object_2_joint" type="free"/>
+        </body>
+    </worldbody>
+</mujoco>
